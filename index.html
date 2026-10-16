@@ -136,11 +136,14 @@ dialog::backdrop{background:#0d3d29cc}
 </div>
 
 <section class="panel">
-<strong>🔑 Keep your recovery code</strong>
-<p class="small">Save this private code. It restores your card if browser data is cleared. Anyone with the code can access the card.</p>
+<details><summary><b>🔑 Switching phones or browsers?</b> Save your recovery code</summary>
+<p class="small">Your card saves to this browser automatically. If you clear your browser, switch phones, or open the game from a different app (like Facebook), use this code to get your card back. Keep it private. Anyone with the code can see your card.</p>
 <p id="code"></p>
 <button id="copy" class="ghost">Copy Recovery Code</button>
-<details style="margin-top:12px"><summary>Restore a card</summary><input id="restoreCode" placeholder="Paste your recovery code" autocomplete="off"><button id="restore">Restore</button></details>
+<p class="small" style="margin:14px 0 0"><b>Have a code? Restore your card:</b></p>
+<input id="restoreCode" placeholder="Paste your recovery code" autocomplete="off">
+<button id="restore">Restore</button>
+</details>
 </section>
 <p class="small foot">Photos and contact details are visible only to the organizer. "Saved" means the server confirmed the upload. "Pending upload" photos exist only on this device until uploaded.</p>
 </main>
