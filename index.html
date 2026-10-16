@@ -1,1 +1,167 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Christmas Light Bingo</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f5f3ee;color:#183a31;font:16px system-ui,-apple-system,sans-serif}main{max-width:720px;margin:auto;padding:24px 16px}h1{font-size:34px;margin:4px 0 8px}.muted{color:#5e6b66}.panel{background:#fff;padding:18px;border-radius:18px;margin:16px 0}button{cursor:pointer;border:0;border-radius:12px;padding:12px;background:#165d47;color:#fff;font:inherit}button:disabled{opacity:.55;cursor:default}.grid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}.tile{position:relative;aspect-ratio:1;overflow:hidden;padding:5px;background:#fff;color:#173d30;border:1px solid #d7ded8;font-size:clamp(9px,2.5vw,14px);font-weight:600}.tile.free{background:#165d47;color:#fff}.tile img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}.tile span{position:relative;z-index:1}.tile.photo span{display:block;background:#14392ddd;color:#fff;border-radius:5px;padding:3px}.tile.win{outline:3px solid #e6b64d}.status{display:block;font-size:10px;margin-top:3px}label{display:block;font-weight:600;font-size:14px}input{display:block;width:100%;padding:12px;margin:6px 0 14px;border:1px solid #aab8b0;border-radius:8px;font:inherit}input[type=checkbox]{width:auto;display:inline;margin:0 6px 0 0}dialog{border:0;border-radius:20px;padding:24px;max-width:440px;width:calc(100% - 32px)}dialog::backdrop{background:#102c26aa}.row{display:flex;gap:8px;flex-wrap:wrap}.error{color:#9c3029}#code{overflow-wrap:anywhere;font:12px monospace}.letters{display:grid;grid-template-columns:repeat(5,1fr);text-align:center;font-weight:800;padding:12px;color:#b18435;font-size:20px}.small{font-size:13px}.hint{font-weight:400;color:#5e6b66}.check{font-weight:400;margin-bottom:12px}#shareImg{width:100%;border-radius:12px;margin:12px 0;display:none}
+</style></head><body><main>
+<p class="muted small">COMMUNITY CHRISTMAS LIGHT HUNT</p><h1>Find the Spirit.</h1>
+<p>Tap a clue and attach a photo. Complete a row, column, or diagonal to submit your bingo. No app or login needed.</p>
+<p class="small">Play from sidewalks or public areas. Do not enter private property. Never play while driving.</p>
+<div class="panel"><div id="message" role="status" aria-live="polite">Loading your card...</div><p id="progress"></p><div class="row"><button id="sync">Sync Card</button><button id="claim" disabled>Submit bingo</button></div><p class="small muted">Sync Card retries any photo still uploading and reloads your card from the server.</p></div>
+<div class="panel" id="sharePanel" hidden><strong>Your shareable card</strong><p class="small">This picture has no name or contact info. Share it with family and friends.</p><button id="makeShare">Get shareable card</button><img id="shareImg" alt="Your completed bingo card"><p class="small muted" id="shareHint" hidden>On a phone, you can also press and hold the picture to save it.</p></div>
+<div class="letters"><span>B</span><span>I</span><span>N</span><span>G</span><span>O</span></div><div id="grid" class="grid"></div>
+<div class="panel"><strong>Keep your recovery code</strong><p class="small">Save this private code. It restores your card if your browser data is cleared. Anyone with it can see your card.</p><p id="code"></p><button id="copy">Copy recovery code</button><details style="margin-top:12px"><summary>Restore a card</summary><input id="restoreCode" placeholder="Paste your recovery code" autocomplete="off"><button id="restore">Restore</button></details></div>
+<p class="small muted">Your photos and contact details are visible only to the organizer. "Saved" means the server confirmed the upload. "Pending" photos exist only on this phone until they upload.</p>
+</main><input id="file" type="file" accept="image/*" hidden>
+<dialog id="entry"><h2>You have bingo!</h2><p>Submit for organizer review and prize credit.</p>
+<form id="entryForm" novalidate>
+<label>Name<input name="name" maxlength="100" autocomplete="name"></label>
+<p class="small hint">Phone or email is required (one is enough).</p>
+<label>Phone <span class="hint">(optional if email entered)</span><input name="phone" type="tel" maxlength="40" autocomplete="tel"></label>
+<label>Email <span class="hint">(optional if phone entered)</span><input name="email" type="email" maxlength="254" autocomplete="email"></label>
+<label class="small check"><input name="consent" type="checkbox"> I agree to organizer review of my photos and contact for this event. (required)</label>
+<label class="small check"><input name="share" type="checkbox"> The organizer may publicly share my card picture. It will not show my name or contact info. (optional)</label>
+<p id="entryError" class="error" role="alert"></p>
+<div class="row"><button id="send" type="submit">Submit entry</button><button id="later" type="button">Not now</button></div></form></dialog>
+<script>
+// >>> PASTE your Apps Script web app URL (ends in /exec) between the quotes:
+const API_URL = 'PASTE_YOUR_EXEC_URL_HERE';
 
+const $=id=>document.getElementById(id), KEY='christmas-bingo-v3-token';
+let token='', card=null, db, busy=false, selected=null, prompted=false, localOK=true;
+const photos=new Map();
+async function rpc(action,...args){
+  let res;
+  try{res=await fetch(API_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action,args})});}
+  catch(e){throw Error('Could not reach the game server. Check your connection and tap Sync Card.');}
+  let out; try{out=await res.json();}catch(e){throw Error('Unexpected server response. Tap Sync Card.');}
+  if(!out.ok) throw Error(out.error||'Server error.');
+  return out.data;
+}
+function message(t,err=false){$('message').textContent=t;$('message').className=err?'error':'';}
+function openDB(){return new Promise((res,rej)=>{const r=indexedDB.open('christmas-bingo-v3',1);r.onupgradeneeded=()=>r.result.createObjectStore('photos',{keyPath:'key'});r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error);});}
+function store(v){return new Promise((res,rej)=>{const t=db.transaction('photos','readwrite');t.objectStore('photos').put(v);t.oncomplete=res;t.onerror=()=>rej(t.error);t.onabort=()=>rej(t.error);});}
+function all(){return new Promise((res,rej)=>{const r=db.transaction('photos').objectStore('photos').getAll();r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error);});}
+function lines(){const o=[];for(let n=0;n<5;n++){o.push(Array.from({length:5},(_,i)=>n*5+i));o.push(Array.from({length:5},(_,i)=>i*5+n));}return o.concat([[0,6,12,18,24],[4,8,12,16,20]]);}
+function wins(){const s=new Set(card?card.saved:[]);s.add(12);return lines().filter(l=>l.every(i=>s.has(i)));}
+const pending=()=>[...photos.values()].some(p=>p.pending);
+function render(){
+  if(!card)return;const win=new Set(wins().flat());$('grid').replaceChildren();
+  card.clues.forEach((clue,i)=>{
+    const b=document.createElement('button'),p=photos.get(i);
+    b.className='tile'+(i===12?' free':'')+(p?' photo':'')+(win.has(i)?' win':'');
+    b.disabled=i===12||busy||card.submitted;
+    if(p){const img=document.createElement('img');img.src=p.data;img.alt='Your photo for '+clue;b.append(img);}
+    const t=document.createElement('span');t.textContent=clue;b.append(t);
+    if(i!==12&&(p||card.saved.includes(i))){const s=document.createElement('span');s.className='status';s.textContent=p&&p.pending?'Pending upload':'Saved';b.append(s);}
+    b.onclick=()=>{selected=i;$('file').click();};$('grid').append(b);
+  });
+  $('progress').textContent=card.saved.length+' / 24 photos saved'+(card.submitted?' | Entry '+card.receipt:'');
+  $('claim').disabled=busy||!wins().length||card.submitted||pending();
+  $('code').textContent=token;$('sync').disabled=busy;
+  $('sharePanel').hidden=!card.submitted;
+  if(wins().length&&!prompted&&!card.submitted&&!busy&&!pending()){prompted=true;$('entry').showModal();}
+}
+async function compress(file){
+  if(file.size>25000000)throw Error('Choose a photo under 25 MB.');
+  const url=URL.createObjectURL(file);
+  try{const img=new Image();await new Promise((res,rej)=>{img.onload=res;img.onerror=()=>rej(Error('Photo format not supported. Try a JPEG.'));img.src=url;});
+    const sc=Math.min(1,1280/Math.max(img.width,img.height)),c=document.createElement('canvas');
+    c.width=Math.max(1,Math.round(img.width*sc));c.height=Math.max(1,Math.round(img.height*sc));
+    c.getContext('2d').drawImage(img,0,0,c.width,c.height);
+    const d=c.toDataURL('image/jpeg',.75);if(d.length>1300000)throw Error('Photo too large. Try another.');return d;
+  }finally{URL.revokeObjectURL(url);}
+}
+async function hydrate(){for(const i of card.saved){if(photos.has(i))continue;try{const data=await rpc('getPhoto',token,i),p={key:token+':'+i,slot:i,token,data,pending:false};photos.set(i,p);if(db)await store(p);render();}catch(e){message('A saved photo preview did not load. Tap Sync Card.',true);}}}
+async function sync(){
+  if(busy||!card)return;busy=true;render();
+  try{for(const p of photos.values()){if(!p.pending)continue;message('Uploading photo... keep this page open.');card=await rpc('savePhoto',token,p.slot,p.data,p.requestId);p.pending=false;if(db)await store(p);}
+    card=await rpc('loadCard',token);
+    message(card.submitted?'Entry received: '+card.receipt:'Your card is saved online.'+(localOK?'':' Copy your recovery code.'));
+  }catch(e){message('Not confirmed saved: '+e.message,true);}
+  finally{await hydrate();busy=false;render();}
+}
+async function freshCard(){const r=await rpc('newCard');token=r.token;card=r.card;photos.clear();prompted=false;try{localStorage.setItem(KEY,token);}catch(e){localOK=false;}}
+async function start(){
+  if(API_URL.indexOf('/exec')<0){message('Setup needed: paste the Apps Script /exec URL into API_URL.',true);return;}
+  try{
+    try{token=localStorage.getItem(KEY)||'';}catch(e){localOK=false;}
+    try{db=await openDB();}catch(e){localOK=false;}
+    if(!token) await freshCard();
+    else{try{card=await rpc('loadCard',token);}catch(e){if(/Card not found|Invalid recovery/.test(e.message))await freshCard();else throw e;}}
+    if(db)for(const p of await all())if(p.token===token)photos.set(p.slot,p);
+    render();await sync();
+  }catch(e){message(e.message+' Use Restore if you have a recovery code.',true);}
+}
+
+// Draws the whole card as one JPG.
+// who = {name, phone, email} for the private organizer copy, or null for the shareable copy.
+async function drawCard(who){
+  for(const i of card.saved){if(!photos.has(i)||!photos.get(i).data){const data=await rpc('getPhoto',token,i);photos.set(i,{key:token+':'+i,slot:i,token,data,pending:false});}}
+  const T=240,G=6,P=24,H=145,W=P*2+T*5+G*4,Ht=H+P+T*5+G*4+P;
+  const c=document.createElement('canvas');c.width=W;c.height=Ht;const x=c.getContext('2d');
+  x.fillStyle='#f5f3ee';x.fillRect(0,0,W,Ht);x.textAlign='center';
+  x.fillStyle='#183a31';x.font='bold 40px system-ui,sans-serif';x.fillText('Christmas Light Bingo',W/2,56);
+  x.fillStyle='#5e6b66';x.font='26px system-ui,sans-serif';
+  if(who){
+    x.fillText(who.name+'  •  '+new Date().toLocaleDateString(),W/2,94);
+    const contact=[who.phone,who.email].filter(Boolean).join('  •  ');
+    if(contact){x.font='22px system-ui,sans-serif';x.fillText(contact,W/2,126);}
+  }else{
+    x.fillStyle='#b18435';x.font='italic bold 30px system-ui,sans-serif';x.fillText('Find the Spirit.',W/2,98);
+  }
+  const win=new Set(wins().flat());
+  const load=src=>new Promise((res,rej)=>{const im=new Image();im.onload=()=>res(im);im.onerror=rej;im.src=src;});
+  function wrap(text,cx,bottom,maxW){x.font='bold 19px system-ui,sans-serif';const words=text.split(' '),ls=[];let l='';
+    for(const w of words){const tt=l?l+' '+w:w;if(x.measureText(tt).width>maxW&&l){ls.push(l);l=w;}else l=tt;}if(l)ls.push(l);
+    const lh=23;let y=bottom-lh*(ls.length-1);ls.forEach(s=>{x.fillText(s,cx,y);y+=lh;});}
+  for(let i=0;i<25;i++){
+    const tx=P+(i%5)*(T+G),ty=H+P+Math.floor(i/5)*(T+G),p=photos.get(i);
+    x.fillStyle=i===12?'#165d47':'#ffffff';x.fillRect(tx,ty,T,T);x.textAlign='center';
+    if(p&&p.data){const im=await load(p.data);const s=Math.max(T/im.width,T/im.height),w=im.width*s,hh=im.height*s;
+      x.save();x.beginPath();x.rect(tx,ty,T,T);x.clip();x.drawImage(im,tx+(T-w)/2,ty+(T-hh)/2,w,hh);x.restore();
+      x.fillStyle='rgba(20,57,45,.82)';x.fillRect(tx,ty+T-62,T,62);x.fillStyle='#fff';wrap(card.clues[i],tx+T/2,ty+T-14-23,T-16);}
+    else if(i===12){x.fillStyle='#fff';x.font='bold 40px system-ui,sans-serif';x.fillText('FREE',tx+T/2,ty+T/2+14);}
+    else{x.fillStyle='#9aa8a0';wrap(card.clues[i],tx+T/2,ty+T/2,T-24);}
+    if(win.has(i)){x.strokeStyle='#e6b64d';x.lineWidth=10;x.strokeRect(tx+5,ty+5,T-10,T-10);}
+  }
+  for(const q of [.8,.65,.5]){const d=c.toDataURL('image/jpeg',q);if(d.length<2000000)return d;}
+  throw Error('Card picture too large.');
+}
+function download(dataUrl,name){const a=document.createElement('a');a.href=dataUrl;a.download=name;document.body.append(a);a.click();a.remove();}
+
+$('file').onchange=async e=>{
+  const f=e.target.files[0],slot=selected;e.target.value='';if(!f||slot===null)return;
+  busy=true;render();
+  try{const data=await compress(f),p={key:token+':'+slot,slot,token,data,pending:true,requestId:crypto.randomUUID()};if(db)await store(p);photos.set(slot,p);}
+  catch(err){message('Photo not saved: '+err.message,true);busy=false;render();return;}
+  busy=false;await sync();
+};
+$('sync').onclick=()=>card?sync():start();
+$('claim').onclick=()=>$('entry').showModal();$('later').onclick=()=>$('entry').close();
+$('copy').onclick=async()=>{try{await navigator.clipboard.writeText(token);message('Recovery code copied. Keep it private.');}catch(e){message('Select and copy the code manually.');}};
+$('restore').onclick=async()=>{if(busy)return;const next=$('restoreCode').value.trim();try{const r=await rpc('loadCard',next);token=next;card=r;photos.clear();prompted=false;try{localStorage.setItem(KEY,token);}catch(e){localOK=false;}if(db)for(const p of await all())if(p.token===token)photos.set(p.slot,p);render();await sync();}catch(e){message(e.message,true);}};
+$('makeShare').onclick=async()=>{
+  $('makeShare').disabled=true;
+  try{const d=await drawCard(null);$('shareImg').src=d;$('shareImg').style.display='block';$('shareHint').hidden=false;download(d,'christmas-light-bingo.jpg');}
+  catch(e){message('Could not make the shareable card. Tap Sync Card and try again.',true);}
+  finally{$('makeShare').disabled=false;}
+};
+$('entryForm').onsubmit=async e=>{
+  e.preventDefault();const f=new FormData(e.target),err=$('entryError');err.textContent='';
+  const info={name:(f.get('name')||'').trim(),phone:(f.get('phone')||'').trim(),email:(f.get('email')||'').trim(),consent:f.get('consent')==='on',share:f.get('share')==='on'};
+  if(!info.name){err.textContent='Name is required.';return;}
+  if(!info.phone&&!info.email){err.textContent='Enter a phone number or an email.';return;}
+  if(!info.consent){err.textContent='Please check the agreement box.';return;}
+  $('send').disabled=true;
+  try{
+    let priv='',pub='';
+    try{priv=await drawCard(info);}catch(x){priv='';}
+    try{pub=await drawCard(null);}catch(x){pub='';}
+    const r=await rpc('submitEntry',token,info,priv,pub);
+    card.receipt=r.receipt;card.submitted=true;e.target.reset();$('entry').close();
+    message('Entry received: '+r.receipt+'. Pending organizer review.');render();
+  }catch(x){err.textContent=x.message;}finally{$('send').disabled=false;}
+};
+window.addEventListener('online',()=>sync());start();
+</script></body></html>
