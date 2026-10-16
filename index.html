@@ -31,6 +31,7 @@ button:disabled{opacity:.45;cursor:default}
 button.red{background:var(--red)}button.gold{background:var(--gold);color:#3a2a05}button.ghost{background:#fff;color:var(--green);border:2px solid var(--green)}
 .row{display:flex;gap:8px;flex-wrap:wrap}
 #message{font-weight:700}
+summary{cursor:pointer}
 .cardwrap{background:var(--cream);border-radius:18px;padding:12px;border:4px solid var(--gold);box-shadow:0 4px 18px #0005}
 .letters{display:grid;grid-template-columns:repeat(5,1fr);text-align:center;font:700 30px Georgia,serif;padding:2px 0 8px}
 .letters span:nth-child(odd){color:var(--red)}.letters span:nth-child(even){color:var(--green)}
@@ -38,6 +39,7 @@ button.red{background:var(--red)}button.gold{background:var(--gold);color:#3a2a0
 .tile{position:relative;aspect-ratio:1;overflow:hidden;padding:5px;background:#fff;color:var(--ink);border:2px solid #d9cfb8;border-radius:10px;font-size:clamp(9px,2.4vw,14px);font-weight:700;line-height:1.12;overflow-wrap:anywhere;min-height:0}
 .tile:hover:not(:disabled){border-color:var(--red)}
 .tile.free{background:var(--red);color:#fff;border-color:var(--gold);font:700 clamp(14px,4vw,22px) Georgia,serif}
+.tile.free:disabled{opacity:1}
 .tile img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .tile span{position:relative;z-index:1}
 .tile.photo span{display:block;background:#0d3d29e6;color:#fff;border-radius:6px;padding:3px}
@@ -66,11 +68,11 @@ dialog::backdrop{background:#0d3d29cc}
  .pp:last-child{break-after:auto;page-break-after:auto}
  .pp .ptitle{text-align:center;font:700 30pt Georgia,serif;margin:0}
  .pp .psub{text-align:center;font:italic 700 15pt Georgia,serif;margin:2pt 0 4pt}
- .pp .pdeco{text-align:center;font-size:12pt;letter-spacing:8pt;margin:0 0 10pt}
- .pp h3{font:700 13pt Georgia,serif;margin:13pt 0 4pt;border-bottom:1pt solid #000;padding-bottom:2pt}
- .pp p,.pp li{font:11pt/1.4 system-ui,sans-serif;margin:3pt 0}
+ .pp .pdeco{text-align:center;font-size:12pt;letter-spacing:8pt;margin:0 0 8pt}
+ .pp h3{font:700 13pt Georgia,serif;margin:11pt 0 4pt;border-bottom:1pt solid #000;padding-bottom:2pt}
+ .pp p,.pp li{font:11pt/1.35 system-ui,sans-serif;margin:3pt 0}
  .pp ol,.pp ul{margin:2pt 0;padding-left:18pt}
- .pprize{border:2pt dashed #000;border-radius:8pt;padding:9pt 13pt;margin:10pt 0}
+ .pprize{border:2pt dashed #000;border-radius:8pt;padding:8pt 13pt;margin:8pt 0}
  .pprize b.big{display:block;font:700 14pt Georgia,serif;margin-bottom:3pt}
  .pline{display:flex;gap:6pt;align-items:flex-end;margin:9pt 0;font:600 11pt system-ui,sans-serif}
  .pline span{flex:1;border-bottom:1pt solid #000;height:14pt}
@@ -108,7 +110,7 @@ dialog::backdrop{background:#0d3d29cc}
 <span class="ribbon">🎁 PRIZE DRAWING</span>
 <h2>Complete a Bingo. Earn a Chance to Win!</h2>
 <p>Everyone who completes a verified Bingo will be entered into our <strong>Christmas Bingo gift card drawing</strong>.</p>
-<p><strong>Complete the hunt. Find the spirit. You could be our lucky winner!</strong></p>
+<p><strong>Complete the hunt. Find your Christmas spirit. You could be our lucky winner!</strong></p>
 <p class="fine">Complete any row, column, or diagonal. Entries are subject to organizer review. One submitted Bingo card earns one entry.</p>
 </section>
 
@@ -121,6 +123,8 @@ dialog::backdrop{background:#0d3d29cc}
 <button id="print" class="ghost">Print Card</button>
 <button id="sync" class="ghost">Sync Card</button>
 </div>
+<details class="small" style="margin:10px 0"><summary><b>📄 Playing on paper?</b> Where to turn in your card</summary>
+<p style="margin:6px 0"><b>Goessel City Office, 101 S. Cedar</b><br>During office hours: Mon&ndash;Thu 8&ndash;12 &amp; 1&ndash;5, Fri 8&ndash;12<br>After hours: Use the utility drop box on the east side of the building.</p></details>
 <p class="small hint"><b>Save My Card</b> saves a picture of your card with no name or contact info. <b>Print Card</b> prints instructions and a paper card on 2 pages. <b>Sync Card</b> re-sends photos still marked "Pending upload."</p>
 </section>
 
@@ -143,11 +147,11 @@ dialog::backdrop{background:#0d3d29cc}
 <div id="printArea">
  <section class="pp">
   <p class="ptitle">Christmas Bingo</p>
-  <p class="psub">Find the Spirit.</p>
+  <p class="psub">Find Your Christmas Spirit.</p>
   <p class="pdeco">✶ ✶ ✶</p>
   <div class="pprize">
    <b class="big">Complete a Bingo. Earn a Chance to Win!</b>
-   <p>Everyone who completes a verified Bingo will be entered into our <b>Christmas Bingo gift card drawing</b>. Complete the hunt. Find the spirit. You could be our lucky winner!</p>
+   <p>Everyone who completes a verified Bingo will be entered into our <b>Christmas Bingo gift card drawing</b>. Complete the hunt. Find your Christmas spirit. You could be our lucky winner!</p>
   </div>
   <h3>How to Play</h3>
   <ol>
@@ -167,11 +171,16 @@ dialog::backdrop{background:#0d3d29cc}
    <li>Never play while driving. Let a passenger fill in the card.</li>
    <li>One entry per completed Bingo card. Entries are subject to organizer review.</li>
   </ul>
-  <div class="pline">Turn in completed cards to: <span></span></div>
+  <h3>Turn In Your Paper Card</h3>
+  <p><b>Goessel City Office, 101 S. Cedar</b></p>
+  <ul>
+   <li><b>During office hours:</b> Mon&ndash;Thu 8&ndash;12 &amp; 1&ndash;5, Fri 8&ndash;12</li>
+   <li><b>After hours:</b> Use the utility drop box on the east side of the building.</li>
+  </ul>
   <div class="pline">Deadline: <span></span></div>
  </section>
  <section class="pp">
-  <div class="phead"><p class="ptitle">Christmas Bingo</p><p class="psub">Find the Spirit.</p></div>
+  <div class="phead"><p class="ptitle">Christmas Bingo</p><p class="psub">Find Your Christmas Spirit.</p></div>
   <div class="pinfo">
    <div class="pline">Name: <span></span></div>
    <div class="pline">Phone or Email: <span></span></div>
@@ -202,6 +211,7 @@ dialog::backdrop{background:#0d3d29cc}
 // IMPORTANT: Replace the placeholder with your Apps Script web-app URL ending in /exec.
 const API_URL = 'https://script.google.com/macros/s/AKfycbzewRWlxVxmGqEomJnw6INTK5mmAmPkwYQIP79jjUBZlAGPmBn1KuMVqJtFfqdh-ctE/exec';
 
+const TAGLINE = 'Find Your Christmas Spirit.';
 const $=id=>document.getElementById(id),KEY='christmas-bingo-v2-token';
 let token='',card=null,db,busy=false,selected=null,prompted=false,localOK=true;
 const photos=new Map();
@@ -214,6 +224,7 @@ async function rpc(action,...args){
  if(!out.ok)throw Error(out.error||'Server error.');return out.data;
 }
 function message(t,err=false){$('message').textContent=t;$('message').className=err?'error':'';}
+function normalStatus(){if(!busy&&card)message(card.submitted?'🎉 Entry received: '+card.receipt+'. Pending organizer review.':'✅ Your card is saved online.');}
 function openDB(){return new Promise((res,rej)=>{const r=indexedDB.open('christmas-bingo-v2',1);r.onupgradeneeded=()=>r.result.createObjectStore('photos',{keyPath:'key'});r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error);});}
 function store(v){return new Promise((res,rej)=>{const t=db.transaction('photos','readwrite');t.objectStore('photos').put(v);t.oncomplete=res;t.onerror=()=>rej(t.error);t.onabort=()=>rej(t.error);});}
 function all(){return new Promise((res,rej)=>{const r=db.transaction('photos').objectStore('photos').getAll();r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error);});}
@@ -260,7 +271,7 @@ async function buildCardImage(opts){
  x.fillStyle='#b3202a';x.fillRect(0,0,W,H);x.fillStyle='#d9a634';x.fillRect(0,H-8,W,8);
  for(let k=0;k<W;k+=40){x.fillStyle=['#d9a634','#fff','#145a3c','#fff'][(k/40)%4|0];x.fillRect(k,0,30,10);}
  x.textAlign='center';x.fillStyle='#fff';x.font='bold 54px Georgia,serif';x.fillText('Christmas Bingo',W/2,78);
- x.fillStyle='#ffe7a8';x.font='italic bold 32px Georgia,serif';x.fillText('Find the Spirit.',W/2,122);
+ x.fillStyle='#ffe7a8';x.font='italic bold 32px Georgia,serif';x.fillText(TAGLINE,W/2,122);
  x.fillStyle='#fff';
  if(opts.isPrivate){x.font='26px system-ui,sans-serif';x.fillText(opts.name+'  •  '+new Date().toLocaleDateString(),W/2,160);const contact=[opts.phone,opts.email].filter(Boolean).join('  •  ');if(contact){x.font='22px system-ui,sans-serif';x.fillText(contact,W/2,186);}}
  else{x.font='24px system-ui,sans-serif';x.fillText('★  '+new Date().getFullYear()+' Community Christmas Bingo  ★',W/2,168);}
@@ -274,7 +285,7 @@ async function buildCardImage(opts){
  for(const q of [.8,.65,.5]){const d=c.toDataURL('image/jpeg',q);if(d.length<2000000)return d;}throw Error('Card picture too large.');
 }
 // Save My Card: picture with no personal info. Works any time.
-async function saveMyCard(){if(busy||!card)return;busy=true;render();try{message('Making your card picture...');const data=await buildCardImage({isPrivate:false});const blob=await(await fetch(data)).blob(),file=new File([blob],'christmas-bingo.jpg',{type:'image/jpeg'});if(navigator.canShare&&navigator.canShare({files:[file]})){await navigator.share({files:[file],title:'Christmas Bingo'});}else{const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='christmas-bingo.jpg';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),2000);}message('🎄 Card picture ready. It has no name or contact info.');}catch(e){if(e&&e.name!=='AbortError')message('Could not save your card: '+e.message,true);else message('Card picture canceled.');}finally{busy=false;render();}}
+async function saveMyCard(){if(busy||!card)return;busy=true;render();try{message('Making your card picture...');const data=await buildCardImage({isPrivate:false});const blob=await(await fetch(data)).blob(),file=new File([blob],'christmas-bingo.jpg',{type:'image/jpeg'});if(navigator.canShare&&navigator.canShare({files:[file]})){await navigator.share({files:[file],title:'Christmas Bingo'});}else{const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='christmas-bingo.jpg';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),2000);}message('🎄 Card picture ready. It has no name or contact info.');}catch(e){if(e&&e.name!=='AbortError')message('Could not save your card: '+e.message,true);else message('Card picture canceled.');}finally{busy=false;render();setTimeout(normalStatus,4000);}}
 
 $('file').onchange=async e=>{const f=e.target.files[0],slot=selected;e.target.value='';if(!f||slot===null)return;busy=true;render();try{const data=await compress(f),p={key:token+':'+slot,slot,token,data,pending:true,requestId:crypto.randomUUID()};if(db)await store(p);photos.set(slot,p);}catch(err){message('Photo not saved: '+err.message,true);busy=false;render();return;}busy=false;await sync();};
 $('sync').onclick=()=>card?sync():start();$('claim').onclick=()=>$('entry').showModal();$('later').onclick=()=>$('entry').close();$('save').onclick=saveMyCard;$('print').onclick=printCard;
