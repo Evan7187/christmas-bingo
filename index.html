@@ -93,7 +93,7 @@
   <h3>How to Play</h3>
   <ol>
    <li>Look for the Christmas sights listed on your card (page 2).</li>
-   <li>When you find one, write <b>where</b> you saw it in that square: a street, cross streets, business, or landmark.</li>
+   <li>When you find one, write its<b>location</b> in that square: a street, nearest cross streets, business, landmark and a detail. Example: <i> "Main & Pine, blue house, on the roof."</i></li>
    <li>The center square is <b>FREE</b>.</li>
    <li>Complete any full <b>row, column, or diagonal</b> to get a Bingo.</li>
    <li>Write your name and a phone number or email on the card, then turn it in.</li>
@@ -118,7 +118,7 @@
   </div>
   <div class="pletters"><span>B</span><span>I</span><span>N</span><span>G</span><span>O</span></div>
   <div class="pgrid" id="pgrid"></div>
-  <p class="pfoot">Complete any row, column, or diagonal. Write where you found each one.</p>
+  <p class="pfoot">Complete any row, column, or diagonal. Location example: "Main & Pine, blue house, on the roof."</p>
  </section>
 </div>
 
@@ -177,7 +177,7 @@ function printCard(){
  const g=$('pgrid');g.replaceChildren();
  card.clues.forEach((clue,i)=>{const d=document.createElement('div');
   if(i===12){d.className='pc pfree';d.textContent='FREE';}
-  else{d.className='pc';const c=document.createElement('div');c.className='pclue';c.textContent=clue;const w=document.createElement('div');w.className='pwhere';w.textContent='Where:';d.append(c,w);}
+  else{d.className='pc';const c=document.createElement('div');c.className='pclue';c.textContent=clue;const w=document.createElement('div');w.className='pwhere';w.textContent='Location:';d.append(c,w);}
   g.append(d);});
  $('purl').textContent=location.origin+location.pathname;
  window.print();
