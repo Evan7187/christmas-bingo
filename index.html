@@ -36,15 +36,18 @@ summary{cursor:pointer}
 .letters{display:grid;grid-template-columns:repeat(5,1fr);text-align:center;font:700 30px Georgia,serif;padding:2px 0 8px}
 .letters span:nth-child(odd){color:var(--red)}.letters span:nth-child(even){color:var(--green)}
 .grid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
-.tile{position:relative;aspect-ratio:1;overflow:hidden;padding:5px;background:#fff;color:var(--ink);border:2px solid #d9cfb8;border-radius:10px;font-size:clamp(9px,2.4vw,14px);font-weight:700;line-height:1.12;overflow-wrap:anywhere;min-height:0}
+.tile{position:relative;aspect-ratio:1;overflow:hidden;padding:4px;background:#fff;color:var(--ink);border:2px solid #d9cfb8;border-radius:10px;font-weight:700;line-height:1.15;min-width:0;container-type:inline-size;display:flex;align-items:center;justify-content:center;text-align:center}
 .tile:hover:not(:disabled){border-color:var(--red)}
-.tile.free{background:var(--red);color:#fff;border-color:var(--gold);font:700 clamp(14px,4vw,22px) Georgia,serif}
-.tile.free:disabled{opacity:1}
+.tile:disabled{opacity:1;cursor:default}
+.tile .clue{font-size:clamp(8px,14cqi,16px);word-break:normal;overflow-wrap:normal;hyphens:auto;-webkit-hyphens:auto;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
+.tile.free{background:var(--red);color:#fff;border-color:var(--gold)}
+.tile.free .clue{font:700 clamp(12px,22cqi,26px) Georgia,serif}
 .tile img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-.tile span{position:relative;z-index:1}
-.tile.photo span{display:block;background:#0d3d29e6;color:#fff;border-radius:6px;padding:3px}
+.tile.photo{align-items:flex-end;padding:0}
+.tile.photo .clue{position:relative;z-index:1;width:100%;background:#0d3d29e6;color:#fff;font-size:clamp(7px,11cqi,13px);padding:2px 3px;-webkit-line-clamp:2}
+.tile .badge{position:absolute;top:3px;right:3px;z-index:2;background:#fff;color:var(--green);border-radius:999px;font-size:clamp(8px,12cqi,13px);line-height:1;padding:3px 5px;box-shadow:0 1px 3px #0005}
+.tile .badge.pending{color:#a3121c}
 .tile.win{outline:4px solid var(--gold);outline-offset:-2px}
-.status{display:block;font-size:10px;margin-top:3px}
 label{display:block;font-weight:700;font-size:15px}
 input{display:block;width:100%;padding:12px;margin:6px 0 14px;border:2px solid #c9bfa6;border-radius:10px;font:inherit;background:#fff}
 input:focus,button:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
@@ -240,9 +243,12 @@ const pending=()=>[...photos.values()].some(p=>p.pending);
 
 function render(){
  if(!card)return;const win=new Set(wins().flat());$('grid').replaceChildren();
- card.clues.forEach((clue,i)=>{const b=document.createElement('button'),p=photos.get(i);b.className='tile'+(i===12?' free':'')+(p?' photo':'')+(win.has(i)?' win':'');b.disabled=i===12||busy||card.submitted;
-  if(p){const img=document.createElement('img');img.src=p.data;img.alt='Your photo for '+clue;b.append(img);}const t=document.createElement('span');t.textContent=i===12?'★ FREE ★':clue;b.append(t);
-  if(i!==12&&(p||card.saved.includes(i))){const s=document.createElement('span');s.className='status';s.textContent=p&&p.pending?'Pending upload':'Saved';b.append(s);}b.onclick=()=>{selected=i;$('file').click();};$('grid').append(b);});
+  card.clues.forEach((clue,i)=>{const b=document.createElement('button'),p=photos.get(i);b.className='tile'+(i===12?' free':'')+(p?' photo':'')+(win.has(i)?' win':'');b.disabled=i===12||busy||card.submitted;
+  let short=clue.replace(/^find (an? )?/i,'');short=short.charAt(0).toUpperCase()+short.slice(1);b.title=clue;b.setAttribute('aria-label',clue);
+  if(p){const img=document.createElement('img');img.src=p.data;img.alt='Your photo for '+clue;b.append(img);}
+  const t=document.createElement('span');t.className='clue';t.textContent=i===12?'FREE':short;b.append(t);
+  if(i!==12&&(p||card.saved.includes(i))){const s=document.createElement('span');const pend=p&&p.pending;s.className='badge'+(pend?' pending':'');s.textContent=pend?'!':'✓';s.title=pend?'Pending upload':'Saved';b.append(s);}
+  b.onclick=()=>{selected=i;$('file').click();};$('grid').append(b);});
  $('progress').textContent=card.saved.length+' / 24 photos saved'+(card.submitted?' | Entry '+card.receipt:'');
  $('claim').disabled=busy||!wins().length||card.submitted||pending();$('claim').hidden=card.submitted;
  $('save').disabled=busy;$('code').textContent=token;$('sync').disabled=busy;
