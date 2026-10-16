@@ -5,80 +5,138 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Christmas Bingo</title>
 <style>
-*{box-sizing:border-box}body{margin:0;background:#f5f3ee;color:#183a31;font:16px system-ui,-apple-system,sans-serif}main{max-width:720px;margin:auto;padding:24px 16px}h1{font-size:36px;margin:4px 0 8px}.muted{color:#5e6b66}.small{font-size:13px}.hint{font-weight:400;color:#5e6b66}.panel{background:#fff;padding:18px;border-radius:18px;margin:16px 0;box-shadow:0 2px 12px #173d3010}.prize{background:linear-gradient(135deg,#123f32,#1f6c52);color:#fff;border:2px solid #d7ae52}.prize .eyebrow{font-size:12px;letter-spacing:.12em;font-weight:800;color:#f5d98e}.prize h2{font-size:25px;margin:8px 0}.prize p{margin:8px 0}.prize .fine{color:#d9eee5;font-size:13px}button{cursor:pointer;border:0;border-radius:12px;padding:12px;background:#165d47;color:#fff;font:inherit;font-weight:650}button:disabled{opacity:.48;cursor:default}button.gold{background:#aa7b27}button.light{background:#e7ece8;color:#183a31}.row{display:flex;gap:8px;flex-wrap:wrap}.grid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}.tile{position:relative;aspect-ratio:1;overflow:hidden;padding:5px;background:#fff;color:#173d30;border:1px solid #d7ded8;font-size:clamp(9px,2.5vw,14px);font-weight:650}.tile.free{background:#165d47;color:#fff}.tile img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}.tile span{position:relative;z-index:1}.tile.photo span{display:block;background:#14392ddd;color:#fff;border-radius:5px;padding:3px}.tile.win{outline:3px solid #e6b64d}.status{display:block;font-size:10px;margin-top:3px}.letters{display:grid;grid-template-columns:repeat(5,1fr);text-align:center;font-weight:850;padding:12px;color:#b18435;font-size:20px}label{display:block;font-weight:650;font-size:14px}input{display:block;width:100%;padding:12px;margin:6px 0 14px;border:1px solid #aab8b0;border-radius:8px;font:inherit}input[type=checkbox]{width:auto;display:inline;margin:0 6px 0 0}dialog{border:0;border-radius:20px;padding:24px;max-width:440px;width:calc(100% - 32px)}dialog::backdrop{background:#102c26aa}.error{color:#9c3029}#code{overflow-wrap:anywhere;font:12px monospace}[hidden]{display:none!important}
+/* ---------- FESTIVE SCREEN THEME ---------- */
+:root{--red:#b3202a;--red-dk:#8a1820;--green:#145a3c;--green-dk:#0d3d29;--gold:#d9a634;--cream:#fffaf0;--ink:#1f2a24;--soft:#5b6660}
+*{box-sizing:border-box}
+body{margin:0;color:var(--ink);font:17px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif;
+ background:var(--green-dk);
+ background-image:radial-gradient(circle at 10% 20%,#ffffff22 1.5px,transparent 2px),radial-gradient(circle at 70% 60%,#ffffff1c 1.5px,transparent 2px),radial-gradient(circle at 40% 80%,#ffffff18 1px,transparent 1.5px);
+ background-size:120px 120px,90px 90px,60px 60px}
+main{max-width:720px;margin:auto;padding:0 14px 32px}
+.hero{background:linear-gradient(160deg,var(--red),var(--red-dk));color:#fff;text-align:center;padding:26px 18px 22px;border-radius:0 0 24px 24px;border-bottom:5px solid var(--gold);position:relative;overflow:hidden}
+.hero:before{content:"";position:absolute;inset:0 0 auto 0;height:10px;background:repeating-linear-gradient(90deg,var(--gold) 0 14px,#fff 14px 20px,var(--green) 20px 34px,#fff 34px 40px)}
+.hero .eyebrow{letter-spacing:.18em;font-size:13px;font-weight:800;color:#ffe7a8;margin-top:6px}
+.hero h1{font:700 44px/1.05 Georgia,"Times New Roman",serif;margin:6px 0 4px;text-shadow:0 2px 0 #0003}
+.hero .tag{font:italic 700 22px Georgia,serif;color:#ffe7a8;margin:0}
+.hero .deco{font-size:26px;letter-spacing:10px;margin-top:8px}
+.panel{background:var(--cream);padding:18px;border-radius:18px;margin:16px 0;box-shadow:0 4px 18px #0004}
+.intro p{margin:6px 0}
+.prize{background:linear-gradient(135deg,#fff8e6,#fff);border:3px solid var(--gold);position:relative}
+.prize .ribbon{display:inline-block;background:var(--red);color:#fff;font-weight:800;font-size:12px;letter-spacing:.12em;padding:4px 12px;border-radius:999px}
+.prize h2{font:700 26px Georgia,serif;color:var(--red-dk);margin:10px 0 6px}
+.prize p{margin:6px 0}.prize .fine{color:var(--soft);font-size:14px}
+.small{font-size:14px}.hint{color:var(--soft);font-weight:400}.muted{color:var(--soft)}
+button{cursor:pointer;border:0;border-radius:12px;padding:12px 14px;font:inherit;font-weight:700;background:var(--green);color:#fff;min-height:46px}
+button:disabled{opacity:.45;cursor:default}
+button.red{background:var(--red)}button.gold{background:var(--gold);color:#3a2a05}button.ghost{background:#fff;color:var(--green);border:2px solid var(--green)}
+.row{display:flex;gap:8px;flex-wrap:wrap}
+#message{font-weight:700}
+.cardwrap{background:var(--cream);border-radius:18px;padding:12px;border:4px solid var(--gold);box-shadow:0 4px 18px #0005}
+.letters{display:grid;grid-template-columns:repeat(5,1fr);text-align:center;font:700 30px Georgia,serif;padding:2px 0 8px}
+.letters span:nth-child(odd){color:var(--red)}.letters span:nth-child(even){color:var(--green)}
+.grid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+.tile{position:relative;aspect-ratio:1;overflow:hidden;padding:5px;background:#fff;color:var(--ink);border:2px solid #d9cfb8;border-radius:10px;font-size:clamp(9px,2.4vw,14px);font-weight:700;line-height:1.12;overflow-wrap:anywhere;min-height:0}
+.tile:hover:not(:disabled){border-color:var(--red)}
+.tile.free{background:var(--red);color:#fff;border-color:var(--gold);font:700 clamp(14px,4vw,22px) Georgia,serif}
+.tile img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.tile span{position:relative;z-index:1}
+.tile.photo span{display:block;background:#0d3d29e6;color:#fff;border-radius:6px;padding:3px}
+.tile.win{outline:4px solid var(--gold);outline-offset:-2px}
+.status{display:block;font-size:10px;margin-top:3px}
+label{display:block;font-weight:700;font-size:15px}
+input{display:block;width:100%;padding:12px;margin:6px 0 14px;border:2px solid #c9bfa6;border-radius:10px;font:inherit;background:#fff}
+input:focus,button:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+input[type=checkbox]{width:auto;display:inline;margin:0 6px 0 0}
+dialog{border:4px solid var(--gold);border-radius:20px;padding:22px;max-width:440px;width:calc(100% - 28px);background:var(--cream)}
+dialog h2{font:700 28px Georgia,serif;color:var(--red-dk);margin:0 0 6px}
+dialog::backdrop{background:#0d3d29cc}
+.error{color:#a3121c;font-weight:700}
+#code{overflow-wrap:anywhere;font:13px monospace;background:#fff;padding:8px;border-radius:8px}
+.foot{color:#e9f1ec;text-align:center}
+[hidden]{display:none!important}
 
-/* ---------- PRINT LAYOUT (8.5 x 11, 2 pages) ---------- */
+/* ---------- PRINT-FRIENDLY (8.5x11, 2 pages, low ink) ---------- */
 @media screen{#printArea{display:none}}
 @media print{
  @page{size:letter portrait;margin:0.5in}
- body{background:#fff;color:#000;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+ body{background:#fff!important;background-image:none!important;color:#000;font-size:11pt}
  main,dialog,#file{display:none!important}
  #printArea{display:block}
  .pp{height:9.9in;break-after:page;page-break-after:always;overflow:hidden}
  .pp:last-child{break-after:auto;page-break-after:auto}
- .ptitle{text-align:center;font:800 30pt system-ui,sans-serif;margin:0;color:#165d47}
- .psub{text-align:center;font:italic 700 16pt system-ui,sans-serif;color:#aa7b27;margin:2pt 0 14pt}
- .pp h3{font:800 13pt system-ui,sans-serif;margin:14pt 0 4pt;color:#165d47}
+ .pp .ptitle{text-align:center;font:700 30pt Georgia,serif;margin:0}
+ .pp .psub{text-align:center;font:italic 700 15pt Georgia,serif;margin:2pt 0 4pt}
+ .pp .pdeco{text-align:center;font-size:12pt;letter-spacing:8pt;margin:0 0 10pt}
+ .pp h3{font:700 13pt Georgia,serif;margin:13pt 0 4pt;border-bottom:1pt solid #000;padding-bottom:2pt}
  .pp p,.pp li{font:11pt/1.4 system-ui,sans-serif;margin:3pt 0}
  .pp ol,.pp ul{margin:2pt 0;padding-left:18pt}
- .pprize{border:2.5pt solid #aa7b27;border-radius:10pt;padding:10pt 14pt;margin:12pt 0;background:#f8f2e2}
- .pprize b.big{display:block;font:800 15pt system-ui,sans-serif;color:#165d47;margin-bottom:3pt}
- .pline{display:flex;gap:6pt;align-items:flex-end;margin:10pt 0;font:600 11pt system-ui,sans-serif}
+ .pprize{border:2pt dashed #000;border-radius:8pt;padding:9pt 13pt;margin:10pt 0}
+ .pprize b.big{display:block;font:700 14pt Georgia,serif;margin-bottom:3pt}
+ .pline{display:flex;gap:6pt;align-items:flex-end;margin:9pt 0;font:600 11pt system-ui,sans-serif}
  .pline span{flex:1;border-bottom:1pt solid #000;height:14pt}
  .purl{font:600 11pt monospace;word-break:break-all}
- .phead{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:6pt}
- .phead .ptitle{font-size:22pt;text-align:left}
- .phead .psub{font-size:12pt;text-align:right;margin:0}
- .pinfo{display:grid;grid-template-columns:1fr 1fr;gap:4pt 14pt;margin-bottom:8pt}
+ .phead{text-align:center;margin-bottom:4pt}
+ .pp .phead .ptitle{font-size:24pt}.pp .phead .psub{font-size:12pt;margin:0}
+ .pinfo{display:grid;grid-template-columns:1fr 1fr;gap:2pt 14pt;margin:4pt 0 6pt}
  .pinfo .pline{margin:4pt 0;font-size:10pt}
- .pletters{display:grid;grid-template-columns:repeat(5,1.46in);margin:0 auto;width:7.3in;text-align:center;font:900 24pt system-ui,sans-serif;color:#aa7b27}
- .pgrid{display:grid;grid-template-columns:repeat(5,1.46in);grid-auto-rows:1.46in;width:7.3in;margin:0 auto;border:2pt solid #165d47}
- .pc{border:0.75pt solid #165d47;padding:5pt;display:flex;flex-direction:column;justify-content:space-between}
+ .pletters{display:grid;grid-template-columns:repeat(5,1.44in);width:7.2in;margin:0 auto;text-align:center;font:700 22pt Georgia,serif}
+ .pgrid{display:grid;grid-template-columns:repeat(5,1.44in);grid-auto-rows:1.44in;width:7.2in;margin:0 auto;border:2pt solid #000}
+ .pc{border:0.75pt solid #000;padding:5pt;display:flex;flex-direction:column;justify-content:space-between}
  .pclue{font:700 10pt/1.2 system-ui,sans-serif;text-align:center}
- .pwhere{font:400 7.5pt system-ui,sans-serif;color:#333;border-bottom:0.75pt solid #777;padding-bottom:12pt}
- .pfree{background:#165d47;color:#fff;align-items:center;justify-content:center;font:900 20pt system-ui,sans-serif}
- .pfoot{text-align:center;font:9pt system-ui,sans-serif;color:#444;margin-top:8pt}
+ .ploc{font:400 7.5pt system-ui,sans-serif;border-bottom:0.75pt solid #000;padding-bottom:14pt}
+ .pfree{align-items:center;justify-content:center;font:700 20pt Georgia,serif;text-align:center}
+ .pfree small{display:block;font:12pt Georgia,serif}
+ .pfoot{text-align:center;font:9pt system-ui,sans-serif;margin-top:6pt}
 }
 </style>
 </head>
 <body>
 <main>
-<p class="muted small">COMMUNITY CHRISTMAS BINGO</p>
-<h1>Find the Christmas Spirit.</h1>
-<p>Tap a clue and attach a photo. Complete a row, column, or diagonal to submit your Bingo. No app or login needed.</p>
-<p class="small">Play from public areas. Do not enter private property. Never play while driving.</p>
+<header class="hero">
+ <div class="eyebrow">COMMUNITY CHRISTMAS BINGO</div>
+ <h1>Christmas Bingo</h1>
+ <p class="tag">Find Your Christmas Spirit.</p>
+ <div class="deco" aria-hidden="true">🎄 ⭐ 🎁 ❄️ 🦌</div>
+</header>
+
+<section class="panel intro">
+<p><strong>How to play:</strong> Tap a square and attach a photo of what you found. Complete a row, column, or diagonal to submit your Bingo. No app or login needed.</p>
+<p class="small hint">Play from public areas. Do not enter private property. Never play while driving.</p>
+</section>
 
 <section class="panel prize" aria-label="Christmas Bingo prize drawing">
-<div class="eyebrow">CHRISTMAS BINGO PRIZE DRAWING</div>
+<span class="ribbon">🎁 PRIZE DRAWING</span>
 <h2>Complete a Bingo. Earn a Chance to Win!</h2>
 <p>Everyone who completes a verified Bingo will be entered into our <strong>Christmas Bingo gift card drawing</strong>.</p>
 <p><strong>Complete the hunt. Find the spirit. You could be our lucky winner!</strong></p>
-<p class="fine">Complete any row, column, or diagonal. Eligible entries are subject to organizer review. One submitted Bingo card earns one entry into the drawing.</p>
+<p class="fine">Complete any row, column, or diagonal. Entries are subject to organizer review. One submitted Bingo card earns one entry.</p>
 </section>
 
 <section class="panel">
 <div id="message" role="status" aria-live="polite">Loading your card...</div>
-<p id="progress"></p>
+<p id="progress" class="small"></p>
 <div class="row">
-<button id="sync">Sync Card</button>
-<button id="claim" disabled>Submit Bingo</button>
-<button id="share" class="gold" hidden>Save Shareable Card</button>
-<button id="print" class="light">Print Card</button>
+<button id="claim" class="red" disabled>Submit Bingo</button>
+<button id="save" class="gold">Save My Card</button>
+<button id="print" class="ghost">Print Card</button>
+<button id="sync" class="ghost">Sync Card</button>
 </div>
-<p class="small hint">Sync Card re-sends photos marked "Pending upload" and reloads your saved card. Print Card prints the instructions and a blank copy of your card on 2 pages.</p>
+<p class="small hint"><b>Save My Card</b> saves a picture of your card with no name or contact info. <b>Print Card</b> prints instructions and a paper card on 2 pages. <b>Sync Card</b> re-sends photos still marked "Pending upload."</p>
 </section>
 
+<div class="cardwrap">
 <div class="letters"><span>B</span><span>I</span><span>N</span><span>G</span><span>O</span></div>
 <div id="grid" class="grid"></div>
+</div>
 
 <section class="panel">
-<strong>Keep your recovery code</strong>
+<strong>🔑 Keep your recovery code</strong>
 <p class="small">Save this private code. It restores your card if browser data is cleared. Anyone with the code can access the card.</p>
 <p id="code"></p>
-<button id="copy">Copy Recovery Code</button>
+<button id="copy" class="ghost">Copy Recovery Code</button>
 <details style="margin-top:12px"><summary>Restore a card</summary><input id="restoreCode" placeholder="Paste your recovery code" autocomplete="off"><button id="restore">Restore</button></details>
 </section>
-<p class="small muted">Photos and contact details are visible only to the organizer. "Saved" means the server confirmed the upload. "Pending upload" photos exist only on this device until uploaded. The shareable card contains no name, phone number, or email address.</p>
+<p class="small foot">Photos and contact details are visible only to the organizer. "Saved" means the server confirmed the upload. "Pending upload" photos exist only on this device until uploaded.</p>
 </main>
 
 <!-- Printed version: only visible when printing -->
@@ -86,6 +144,7 @@
  <section class="pp">
   <p class="ptitle">Christmas Bingo</p>
   <p class="psub">Find the Spirit.</p>
+  <p class="pdeco">✶ ✶ ✶</p>
   <div class="pprize">
    <b class="big">Complete a Bingo. Earn a Chance to Win!</b>
    <p>Everyone who completes a verified Bingo will be entered into our <b>Christmas Bingo gift card drawing</b>. Complete the hunt. Find the spirit. You could be our lucky winner!</p>
@@ -93,17 +152,18 @@
   <h3>How to Play</h3>
   <ol>
    <li>Look for the Christmas sights listed on your card (page 2).</li>
-   <li>When you find one, write its<b>location</b> in that square: a street, nearest cross streets, business, landmark and a detail. Example: <i> "Main & Pine, blue house, on the roof."</i></li>
+   <li>When you find one, write its <b>location</b> in that square: the street, the nearest cross street or landmark, and a detail. Example: <i>"Main &amp; 3rd, blue house, on the roof."</i></li>
+   <li>One great display can count for more than one square. Just write the same location in each.</li>
    <li>The center square is <b>FREE</b>.</li>
    <li>Complete any full <b>row, column, or diagonal</b> to get a Bingo.</li>
    <li>Write your name and a phone number or email on the card, then turn it in.</li>
   </ol>
-  <h3>Prefer to play on your phone?</h3>
+  <h3>Prefer to Play on Your Phone?</h3>
   <p>Play online and snap a photo for each square. No app or login needed:</p>
   <p class="purl" id="purl"></p>
-  <h3>Rules & Safety</h3>
+  <h3>Rules &amp; Safety</h3>
   <ul>
-   <li>Play from roads, sidewalks, and public areas. Do not enter private property.</li>
+   <li>Play from sidewalks and public areas. Do not enter private property.</li>
    <li>Never play while driving. Let a passenger fill in the card.</li>
    <li>One entry per completed Bingo card. Entries are subject to organizer review.</li>
   </ul>
@@ -118,14 +178,14 @@
   </div>
   <div class="pletters"><span>B</span><span>I</span><span>N</span><span>G</span><span>O</span></div>
   <div class="pgrid" id="pgrid"></div>
-  <p class="pfoot">Complete any row, column, or diagonal. Location example: "Main & Pine, blue house, on the roof."</p>
+  <p class="pfoot">Complete any row, column, or diagonal. Location example: "Main &amp; 3rd, blue house, on the roof."</p>
  </section>
 </div>
 
 <input id="file" type="file" accept="image/*" style="display:none" aria-hidden="true">
 
 <dialog id="entry">
-<h2>You have Bingo!</h2>
+<h2>🎉 You have Bingo!</h2>
 <p>Submit your completed card for organizer review and entry into the gift card drawing.</p>
 <form id="entryForm" novalidate>
 <label>Name<input name="name" required maxlength="100" autocomplete="name"></label>
@@ -134,7 +194,7 @@
 <label>Email <span class="hint">(optional when phone is entered)</span><input name="email" type="email" maxlength="254" autocomplete="email"></label>
 <label class="small" style="font-weight:400"><input name="consent" type="checkbox"> I agree to organizer review of my photos and contact for this event.</label>
 <p id="entryError" class="error" role="alert"></p>
-<div class="row"><button id="send" type="submit">Submit Entry</button><button id="later" type="button">Not Now</button></div>
+<div class="row"><button id="send" class="red" type="submit">Submit Entry</button><button id="later" class="ghost" type="button">Not Now</button></div>
 </form>
 </dialog>
 
@@ -143,7 +203,7 @@
 const API_URL = 'https://script.google.com/macros/s/AKfycbzewRWlxVxmGqEomJnw6INTK5mmAmPkwYQIP79jjUBZlAGPmBn1KuMVqJtFfqdh-ctE/exec';
 
 const $=id=>document.getElementById(id),KEY='christmas-bingo-v2-token';
-let token='',card=null,db,busy=false,selected=null,prompted=false,localOK=true,shareData='';
+let token='',card=null,db,busy=false,selected=null,prompted=false,localOK=true;
 const photos=new Map();
 
 async function rpc(action,...args){
@@ -164,20 +224,21 @@ const pending=()=>[...photos.values()].some(p=>p.pending);
 function render(){
  if(!card)return;const win=new Set(wins().flat());$('grid').replaceChildren();
  card.clues.forEach((clue,i)=>{const b=document.createElement('button'),p=photos.get(i);b.className='tile'+(i===12?' free':'')+(p?' photo':'')+(win.has(i)?' win':'');b.disabled=i===12||busy||card.submitted;
-  if(p){const img=document.createElement('img');img.src=p.data;img.alt='Your photo for '+clue;b.append(img);}const t=document.createElement('span');t.textContent=i===12?'FREE':clue;b.append(t);
+  if(p){const img=document.createElement('img');img.src=p.data;img.alt='Your photo for '+clue;b.append(img);}const t=document.createElement('span');t.textContent=i===12?'★ FREE ★':clue;b.append(t);
   if(i!==12&&(p||card.saved.includes(i))){const s=document.createElement('span');s.className='status';s.textContent=p&&p.pending?'Pending upload':'Saved';b.append(s);}b.onclick=()=>{selected=i;$('file').click();};$('grid').append(b);});
  $('progress').textContent=card.saved.length+' / 24 photos saved'+(card.submitted?' | Entry '+card.receipt:'');
- $('claim').disabled=busy||!wins().length||card.submitted||pending();$('claim').hidden=card.submitted;$('share').hidden=!card.submitted;$('share').disabled=busy;$('code').textContent=token;$('sync').disabled=busy;
+ $('claim').disabled=busy||!wins().length||card.submitted||pending();$('claim').hidden=card.submitted;
+ $('save').disabled=busy;$('code').textContent=token;$('sync').disabled=busy;
  if(wins().length&&!prompted&&!card.submitted&&!busy&&!pending()){prompted=true;$('entry').showModal();}
 }
 
-// Builds the 2-page printable version from this player's card, then opens the print dialog.
+// Fills the printable card with this player's clues, then prints.
 function printCard(){
  if(!card){message('Your card is still loading. Try Print Card again in a moment.',true);return;}
  const g=$('pgrid');g.replaceChildren();
  card.clues.forEach((clue,i)=>{const d=document.createElement('div');
-  if(i===12){d.className='pc pfree';d.textContent='FREE';}
-  else{d.className='pc';const c=document.createElement('div');c.className='pclue';c.textContent=clue;const w=document.createElement('div');w.className='pwhere';w.textContent='Location:';d.append(c,w);}
+  if(i===12){d.className='pc pfree';d.innerHTML='<small>✶</small>FREE<small>✶</small>';}
+  else{d.className='pc';const c=document.createElement('div');c.className='pclue';c.textContent=clue;const w=document.createElement('div');w.className='ploc';w.textContent='Location:';d.append(c,w);}
   g.append(d);});
  $('purl').textContent=location.origin+location.pathname;
  window.print();
@@ -188,26 +249,38 @@ async function compress(file){
  try{const img=new Image();await new Promise((res,rej)=>{img.onload=res;img.onerror=()=>rej(Error('Photo format not supported. Try a JPEG.'));img.src=url;});const sc=Math.min(1,1280/Math.max(img.width,img.height)),c=document.createElement('canvas');c.width=Math.max(1,Math.round(img.width*sc));c.height=Math.max(1,Math.round(img.height*sc));c.getContext('2d').drawImage(img,0,0,c.width,c.height);const d=c.toDataURL('image/jpeg',.75);if(d.length>1300000)throw Error('Photo too large. Try another.');return d;}finally{URL.revokeObjectURL(url);}
 }
 async function hydrate(){for(const i of card.saved){if(photos.has(i))continue;try{const data=await rpc('getPhoto',token,i),p={key:token+':'+i,slot:i,token,data,pending:false};photos.set(i,p);if(db)await store(p);render();}catch(e){message('A saved photo preview did not load. Tap Sync Card.',true);}}}
-async function sync(){if(busy||!card)return;busy=true;render();try{for(const p of photos.values()){if(!p.pending)continue;message('Uploading photo... keep this page open.');card=await rpc('savePhoto',token,p.slot,p.data,p.requestId);p.pending=false;if(db)await store(p);}card=await rpc('loadCard',token);message(card.submitted?'Entry received: '+card.receipt+'. Pending organizer review.':'Your card is saved online.'+(localOK?'':' Copy your recovery code.'));}catch(e){message('Not confirmed saved: '+e.message,true);}finally{await hydrate();busy=false;render();}}
+async function sync(){if(busy||!card)return;busy=true;render();try{for(const p of photos.values()){if(!p.pending)continue;message('Uploading photo... keep this page open.');card=await rpc('savePhoto',token,p.slot,p.data,p.requestId);p.pending=false;if(db)await store(p);}card=await rpc('loadCard',token);message(card.submitted?'🎉 Entry received: '+card.receipt+'. Pending organizer review.':'✅ Your card is saved online.'+(localOK?'':' Copy your recovery code.'));}catch(e){message('Not confirmed saved: '+e.message,true);}finally{await hydrate();busy=false;render();}}
 async function start(){if(API_URL.indexOf('/exec')<0){message('Setup needed: paste the Apps Script /exec URL into API_URL.',true);return;}try{try{token=localStorage.getItem(KEY)||'';}catch(e){localOK=false;}try{db=await openDB();}catch(e){localOK=false;}if(!token){const r=await rpc('newCard');token=r.token;card=r.card;try{localStorage.setItem(KEY,token);}catch(e){localOK=false;}}else card=await rpc('loadCard',token);if(db)for(const p of await all())if(p.token===token)photos.set(p.slot,p);render();await sync();}catch(e){message(e.message+' Use Restore if you have a recovery code.',true);}}
 
+// Festive card picture. isPrivate adds name/date/contact (organizer copy only).
 async function buildCardImage(opts){
  for(const i of card.saved){const p=photos.get(i);if(!p||!p.data){const data=await rpc('getPhoto',token,i);photos.set(i,{key:token+':'+i,slot:i,token,data,pending:false});}}
- const T=240,G=6,P=24,H=175,W=P*2+T*5+G*4,Ht=H+P+T*5+G*4+P,c=document.createElement('canvas');c.width=W;c.height=Ht;const x=c.getContext('2d');x.fillStyle='#f5f3ee';x.fillRect(0,0,W,Ht);x.textAlign='center';x.fillStyle='#183a31';x.font='bold 42px system-ui,sans-serif';x.fillText('Christmas Bingo',W/2,58);x.fillStyle='#b18435';x.font='italic bold 30px system-ui,sans-serif';x.fillText('Find the Spirit.',W/2,98);x.fillStyle='#5e6b66';
- if(opts.isPrivate){x.font='26px system-ui,sans-serif';x.fillText(opts.name+'  •  '+new Date().toLocaleDateString(),W/2,134);const contact=[opts.phone,opts.email].filter(Boolean).join('  •  ');if(contact){x.font='22px system-ui,sans-serif';x.fillText(contact,W/2,164);}}
- else{x.font='24px system-ui,sans-serif';x.fillText(new Date().getFullYear()+' Community Christmas Bingo',W/2,138);}
+ const T=240,G=8,P=30,H=200,W=P*2+T*5+G*4,Ht=H+P+T*5+G*4+P+20,c=document.createElement('canvas');c.width=W;c.height=Ht;const x=c.getContext('2d');
+ x.fillStyle='#0d3d29';x.fillRect(0,0,W,Ht);
+ x.fillStyle='#b3202a';x.fillRect(0,0,W,H);x.fillStyle='#d9a634';x.fillRect(0,H-8,W,8);
+ for(let k=0;k<W;k+=40){x.fillStyle=['#d9a634','#fff','#145a3c','#fff'][(k/40)%4|0];x.fillRect(k,0,30,10);}
+ x.textAlign='center';x.fillStyle='#fff';x.font='bold 54px Georgia,serif';x.fillText('Christmas Bingo',W/2,78);
+ x.fillStyle='#ffe7a8';x.font='italic bold 32px Georgia,serif';x.fillText('Find the Spirit.',W/2,122);
+ x.fillStyle='#fff';
+ if(opts.isPrivate){x.font='26px system-ui,sans-serif';x.fillText(opts.name+'  •  '+new Date().toLocaleDateString(),W/2,160);const contact=[opts.phone,opts.email].filter(Boolean).join('  •  ');if(contact){x.font='22px system-ui,sans-serif';x.fillText(contact,W/2,186);}}
+ else{x.font='24px system-ui,sans-serif';x.fillText('★  '+new Date().getFullYear()+' Community Christmas Bingo  ★',W/2,168);}
  const win=new Set(wins().flat()),saved=new Set(card.saved),load=src=>new Promise((res,rej)=>{const im=new Image();im.onload=()=>res(im);im.onerror=rej;im.src=src;});
  function wrap(text,cx,bottom,maxW){x.font='bold 19px system-ui,sans-serif';const words=text.split(' '),ls=[];let l='';for(const w of words){const tt=l?l+' '+w:w;if(x.measureText(tt).width>maxW&&l){ls.push(l);l=w;}else l=tt;}if(l)ls.push(l);const lh=23;let y=bottom-lh*(ls.length-1);ls.forEach(s=>{x.fillText(s,cx,y);y+=lh;});}
- for(let i=0;i<25;i++){const tx=P+(i%5)*(T+G),ty=H+P+Math.floor(i/5)*(T+G),p=photos.get(i);x.fillStyle=i===12?'#165d47':'#fff';x.fillRect(tx,ty,T,T);x.textAlign='center';if(i!==12&&saved.has(i)&&p&&p.data){const im=await load(p.data),s=Math.max(T/im.width,T/im.height),w=im.width*s,hh=im.height*s;x.save();x.beginPath();x.rect(tx,ty,T,T);x.clip();x.drawImage(im,tx+(T-w)/2,ty+(T-hh)/2,w,hh);x.restore();x.fillStyle='rgba(20,57,45,.82)';x.fillRect(tx,ty+T-62,T,62);x.fillStyle='#fff';wrap(card.clues[i],tx+T/2,ty+T-37,T-16);}else if(i===12){x.fillStyle='#fff';x.font='bold 40px system-ui,sans-serif';x.fillText('FREE',tx+T/2,ty+T/2+14);}else{x.fillStyle='#9aa8a0';wrap(card.clues[i],tx+T/2,ty+T/2,T-24);}if(win.has(i)){x.strokeStyle='#e6b64d';x.lineWidth=10;x.strokeRect(tx+5,ty+5,T-10,T-10);}}
+ for(let i=0;i<25;i++){const tx=P+(i%5)*(T+G),ty=H+P+Math.floor(i/5)*(T+G),p=photos.get(i);x.fillStyle=i===12?'#b3202a':'#fffaf0';x.fillRect(tx,ty,T,T);x.textAlign='center';
+  if(i!==12&&saved.has(i)&&p&&p.data){const im=await load(p.data),s=Math.max(T/im.width,T/im.height),w=im.width*s,hh=im.height*s;x.save();x.beginPath();x.rect(tx,ty,T,T);x.clip();x.drawImage(im,tx+(T-w)/2,ty+(T-hh)/2,w,hh);x.restore();x.fillStyle='rgba(13,61,41,.85)';x.fillRect(tx,ty+T-62,T,62);x.fillStyle='#fff';wrap(card.clues[i],tx+T/2,ty+T-37,T-16);}
+  else if(i===12){x.fillStyle='#fff';x.font='bold 44px Georgia,serif';x.fillText('FREE',tx+T/2,ty+T/2+15);x.fillStyle='#ffe7a8';x.font='28px Georgia,serif';x.fillText('★',tx+T/2,ty+T/2-30);}
+  else{x.fillStyle='#8a9590';wrap(card.clues[i],tx+T/2,ty+T/2,T-24);}
+  if(win.has(i)){x.strokeStyle='#d9a634';x.lineWidth=10;x.strokeRect(tx+5,ty+5,T-10,T-10);}}
  for(const q of [.8,.65,.5]){const d=c.toDataURL('image/jpeg',q);if(d.length<2000000)return d;}throw Error('Card picture too large.');
 }
-async function saveShareable(){if(busy)return;busy=true;render();try{if(!shareData){message('Building your shareable card...');shareData=await buildCardImage({isPrivate:false});}const blob=await(await fetch(shareData)).blob(),file=new File([blob],'christmas-bingo.jpg',{type:'image/jpeg'});if(navigator.canShare&&navigator.canShare({files:[file]})){await navigator.share({files:[file],title:'Christmas Bingo'});}else{const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='christmas-bingo.jpg';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),2000);}message('Shareable card ready. It has no personal information.');}catch(e){if(e&&e.name!=='AbortError')message('Could not save shareable card: '+e.message,true);}finally{busy=false;render();}}
+// Save My Card: picture with no personal info. Works any time.
+async function saveMyCard(){if(busy||!card)return;busy=true;render();try{message('Making your card picture...');const data=await buildCardImage({isPrivate:false});const blob=await(await fetch(data)).blob(),file=new File([blob],'christmas-bingo.jpg',{type:'image/jpeg'});if(navigator.canShare&&navigator.canShare({files:[file]})){await navigator.share({files:[file],title:'Christmas Bingo'});}else{const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='christmas-bingo.jpg';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),2000);}message('🎄 Card picture ready. It has no name or contact info.');}catch(e){if(e&&e.name!=='AbortError')message('Could not save your card: '+e.message,true);else message('Card picture canceled.');}finally{busy=false;render();}}
 
 $('file').onchange=async e=>{const f=e.target.files[0],slot=selected;e.target.value='';if(!f||slot===null)return;busy=true;render();try{const data=await compress(f),p={key:token+':'+slot,slot,token,data,pending:true,requestId:crypto.randomUUID()};if(db)await store(p);photos.set(slot,p);}catch(err){message('Photo not saved: '+err.message,true);busy=false;render();return;}busy=false;await sync();};
-$('sync').onclick=()=>card?sync():start();$('claim').onclick=()=>$('entry').showModal();$('later').onclick=()=>$('entry').close();$('share').onclick=saveShareable;$('print').onclick=printCard;
+$('sync').onclick=()=>card?sync():start();$('claim').onclick=()=>$('entry').showModal();$('later').onclick=()=>$('entry').close();$('save').onclick=saveMyCard;$('print').onclick=printCard;
 $('copy').onclick=async()=>{try{await navigator.clipboard.writeText(token);message('Recovery code copied. Keep it private.');}catch(e){message('Select and copy the code manually.');}};
-$('restore').onclick=async()=>{if(busy)return;const next=$('restoreCode').value.trim();try{const r=await rpc('loadCard',next);token=next;card=r;photos.clear();prompted=false;shareData='';try{localStorage.setItem(KEY,token);}catch(e){localOK=false;}if(db)for(const p of await all())if(p.token===token)photos.set(p.slot,p);render();await sync();}catch(e){message(e.message,true);}};
-$('entryForm').onsubmit=async e=>{e.preventDefault();const f=new FormData(e.target),err=$('entryError');err.textContent='';const info={name:(f.get('name')||'').trim(),phone:(f.get('phone')||'').trim(),email:(f.get('email')||'').trim(),consent:f.get('consent')==='on'};if(!info.name){err.textContent='Name is required.';return;}if(!info.phone&&!info.email){err.textContent='Enter a phone number or an email.';return;}if(!info.consent){err.textContent='Please check the agreement box.';return;}$('send').disabled=true;busy=true;try{let priv='',pub='';try{priv=await buildCardImage({isPrivate:true,name:info.name,phone:info.phone,email:info.email});}catch(x){}try{pub=await buildCardImage({isPrivate:false});shareData=pub;}catch(x){}const r=await rpc('submitEntry',token,info,priv,pub);card.receipt=r.receipt;card.submitted=true;e.target.reset();$('entry').close();message('Entry received: '+r.receipt+'. Pending organizer review. Tap "Save Shareable Card" to keep a copy.');}catch(x){err.textContent=x.message;}finally{$('send').disabled=false;busy=false;render();}};
+$('restore').onclick=async()=>{if(busy)return;const next=$('restoreCode').value.trim();try{const r=await rpc('loadCard',next);token=next;card=r;photos.clear();prompted=false;try{localStorage.setItem(KEY,token);}catch(e){localOK=false;}if(db)for(const p of await all())if(p.token===token)photos.set(p.slot,p);render();await sync();}catch(e){message(e.message,true);}};
+$('entryForm').onsubmit=async e=>{e.preventDefault();const f=new FormData(e.target),err=$('entryError');err.textContent='';const info={name:(f.get('name')||'').trim(),phone:(f.get('phone')||'').trim(),email:(f.get('email')||'').trim(),consent:f.get('consent')==='on'};if(!info.name){err.textContent='Name is required.';return;}if(!info.phone&&!info.email){err.textContent='Enter a phone number or an email.';return;}if(!info.consent){err.textContent='Please check the agreement box.';return;}$('send').disabled=true;busy=true;try{let priv='',pub='';try{priv=await buildCardImage({isPrivate:true,name:info.name,phone:info.phone,email:info.email});}catch(x){}try{pub=await buildCardImage({isPrivate:false});}catch(x){}const r=await rpc('submitEntry',token,info,priv,pub);card.receipt=r.receipt;card.submitted=true;e.target.reset();$('entry').close();message('🎉 Entry received: '+r.receipt+'. Pending organizer review. Tap "Save My Card" to keep a copy.');}catch(x){err.textContent=x.message;}finally{$('send').disabled=false;busy=false;render();}};
 window.addEventListener('online',()=>sync());start();
 </script>
 </body>
