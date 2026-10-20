@@ -18,6 +18,7 @@ main{max-width:720px;margin:auto;padding:0 14px 32px}
 .hero .eyebrow{letter-spacing:.18em;font-size:13px;font-weight:800;color:#ffe7a8;margin-top:6px}
 .hero h1{font:700 44px/1.05 Georgia,"Times New Roman",serif;margin:6px 0 4px;text-shadow:0 2px 0 #0003}
 .hero .tag{font:italic 700 22px Georgia,serif;color:#ffe7a8;margin:0}
+.hero .dates{display:inline-block;margin-top:10px;background:#0003;border:1px solid #ffe7a855;border-radius:999px;padding:5px 14px;font-weight:700;font-size:15px}
 .hero .deco{font-size:26px;letter-spacing:10px;margin-top:8px}
 .panel{background:var(--cream);padding:18px;border-radius:18px;margin:16px 0;box-shadow:0 4px 18px #0004}
 .intro p{margin:6px 0}
@@ -25,6 +26,12 @@ main{max-width:720px;margin:auto;padding:0 14px 32px}
 .prize .ribbon{display:inline-block;background:var(--red);color:#fff;font-weight:800;font-size:12px;letter-spacing:.12em;padding:4px 12px;border-radius:999px}
 .prize h2{font:700 26px Georgia,serif;color:var(--red-dk);margin:10px 0 6px}
 .prize p{margin:6px 0}.prize .fine{color:var(--soft);font-size:14px}
+.prizes{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0}
+.prizes div{background:#fff;border:2px solid var(--gold);border-radius:12px;padding:10px;text-align:center;font-weight:700;line-height:1.3}
+.prizes b{display:block;font:700 28px Georgia,serif;color:var(--green)}
+@media (max-width:420px){.prizes{grid-template-columns:1fr}}
+.when{background:#fff;border-radius:12px;padding:10px 12px;margin:10px 0;border-left:5px solid var(--red)}
+.when p{margin:2px 0}
 .small{font-size:14px}.hint{color:var(--soft);font-weight:400}.muted{color:var(--soft)}
 button{cursor:pointer;border:0;border-radius:12px;padding:12px 14px;font:inherit;font-weight:700;background:var(--green);color:#fff;min-height:46px}
 button:disabled{opacity:.45;cursor:default}
@@ -77,11 +84,11 @@ dialog::backdrop{background:#0d3d29cc}
  #printArea{display:block}
  .pp{height:9.9in;break-after:page;page-break-after:always;overflow:hidden}
  .pp:last-child{break-after:auto;page-break-after:auto}
- .pp .ptitle{text-align:center;font:700 30pt Georgia,serif;margin:0}
- .pp .psub{text-align:center;font:italic 700 15pt Georgia,serif;margin:2pt 0 4pt}
- .pp .pdeco{text-align:center;font-size:12pt;letter-spacing:8pt;margin:0 0 8pt}
- .pp h3{font:700 13pt Georgia,serif;margin:11pt 0 4pt;border-bottom:1pt solid #000;padding-bottom:2pt}
- .pp p,.pp li{font:11pt/1.35 system-ui,sans-serif;margin:3pt 0}
+ .pp .ptitle{text-align:center;font:700 28pt Georgia,serif;margin:0}
+ .pp .psub{text-align:center;font:italic 700 14pt Georgia,serif;margin:2pt 0 2pt}
+ .pp .pdates{text-align:center;font:700 11.5pt system-ui,sans-serif;margin:2pt 0 6pt}
+ .pp h3{font:700 12.5pt Georgia,serif;margin:9pt 0 3pt;border-bottom:1pt solid #000;padding-bottom:2pt}
+ .pp p,.pp li{font:10.5pt/1.32 system-ui,sans-serif;margin:2pt 0}
  .pp ol,.pp ul{margin:2pt 0;padding-left:18pt}
  .pprize{border:2pt dashed #000;border-radius:8pt;padding:8pt 13pt;margin:8pt 0}
  .pprize b.big{display:block;font:700 14pt Georgia,serif;margin-bottom:3pt}
@@ -109,6 +116,7 @@ dialog::backdrop{background:#0d3d29cc}
  <div class="eyebrow">COMMUNITY CHRISTMAS BINGO</div>
  <h1>Christmas Bingo</h1>
  <p class="tag">Find Your Christmas Spirit.</p>
+ <div class="dates">📅 December 14&ndash;27, 2026</div>
  <div class="deco" aria-hidden="true">🎄 ⭐ 🎁 ❄️ 🦌</div>
 </header>
 
@@ -122,9 +130,18 @@ dialog::backdrop{background:#0d3d29cc}
 <section class="panel prize" aria-label="Christmas Bingo prize drawing">
 <span class="ribbon">🎁 PRIZE DRAWING</span>
 <h2>Complete a Bingo. Earn a Chance to Win!</h2>
-<p>Everyone who completes a verified Bingo will be entered into our <strong>Christmas Bingo gift card drawing</strong>.</p>
+<p>Complete a verified Bingo and you will be entered into a drawing to randomly win one of <strong>two $25 local gift cards</strong>:</p>
+<div class="prizes">
+ <div><b>$25</b>Goessel Grocery &amp; Deli</div>
+ <div><b>$25</b>Lincoln Perk at Bethesda Home</div>
+</div>
+<div class="when">
+ <p><b>🎄 Play:</b> Monday, December 14 &ndash; Sunday, December 27, 2026</p>
+ <p><b>⏰ Entry deadline:</b> Sunday, December 27 at 11:59 PM</p>
+ <p><b>🎉 Drawing:</b> Monday, December 28. Winners will be contacted that day.</p>
+</div>
 <p><strong>Complete the hunt. Find your Christmas spirit. You could be our lucky winner!</strong></p>
-<p class="fine">Complete any row, column, or diagonal. <b>Limit one entry per person.</b> Entries are reviewed for completeness. Any honest effort counts!</p>
+<p class="fine">Complete any row, column, or diagonal. <b>Limit one entry per person.</b> Two winners will be drawn at random. Entries are reviewed for completeness. Any honest effort counts!</p>
 </section>
 
 <section class="panel">
@@ -137,7 +154,7 @@ dialog::backdrop{background:#0d3d29cc}
 <button id="sync" class="ghost">Sync Card</button>
 </div>
 <details class="small" style="margin:10px 0"><summary><b>📄 Playing on paper?</b> Where to turn in your card</summary>
-<p style="margin:6px 0"><b>Goessel City Office, 101 S. Cedar</b><br>During office hours: Mon&ndash;Thu 8&ndash;12 &amp; 1&ndash;5, Fri 8&ndash;12<br>After hours: Use the utility drop box on the east side of the building.</p></details>
+<p style="margin:6px 0"><b>Goessel City Office, 101 S. Cedar</b><br>During office hours: Mon&ndash;Thu 8&ndash;12 &amp; 1&ndash;5, Fri 8&ndash;12<br>After hours and weekends: Use the utility drop box on the east side of the building.<br><b>Deadline:</b> Sunday, December 27, 2026.</p></details>
 <p class="small hint" style="margin:4px 0"><b>Save My Card</b> saves a picture of your card with no name or contact info.</p>
 <p class="small hint" style="margin:4px 0"><b>Print Card</b> prints instructions and a paper card on 2 pages.</p>
 <p class="small hint" style="margin:4px 0"><b>Sync Card</b> re-sends photos still marked with a red <b>!</b> (not yet uploaded).</p>
@@ -150,7 +167,7 @@ dialog::backdrop{background:#0d3d29cc}
 <button id="newPlayer" class="ghost">+ New Player</button>
 <button id="renamePlayer" class="ghost">Rename</button>
 </div>
-<p class="small hint" style="margin:0">Each player gets their own card. Switch players any time. Cards stay saved.</p>
+<p class="small hint" style="margin:0">Each player gets their own card. Switch players any time. Cards stay saved. Tap <b>Rename</b> to add a name; it fills in automatically when you submit your Bingo.</p>
 </div>
 
 <div class="cardwrap">
@@ -176,10 +193,11 @@ dialog::backdrop{background:#0d3d29cc}
  <section class="pp">
   <p class="ptitle">Christmas Bingo</p>
   <p class="psub">Find Your Christmas Spirit.</p>
-  <p class="pdeco">✶ ✶ ✶</p>
+  <p class="pdates">✶ Monday, December 14 &ndash; Sunday, December 27, 2026 ✶</p>
   <div class="pprize">
    <b class="big">Complete a Bingo. Earn a Chance to Win!</b>
-   <p>Everyone who completes a verified Bingo will be entered into our <b>Christmas Bingo gift card drawing</b>. Complete the hunt. Find your Christmas spirit. You could be our lucky winner!</p>
+   <p>Complete a verified Bingo and you will be entered into a drawing to randomly win one of <b>two $25 gift cards</b>: <b>Goessel Grocery &amp; Deli</b> and <b>Lincoln Perk at Bethesda Home</b>.</p>
+   <p><b>Deadline:</b> Sunday, December 27 &nbsp;|&nbsp; <b>Drawing:</b> Monday, December 28. Winners will be contacted that day.</p>
   </div>
   <h3>How to Play</h3>
   <ol>
@@ -200,13 +218,12 @@ dialog::backdrop{background:#0d3d29cc}
    <li><b>Limit one entry per person.</b> Play on paper or online, not both.</li>
    <li>Entries are reviewed for completeness. Any honest effort counts!</li>
   </ul>
-  <h3>Turn In Your Paper Card</h3>
+  <h3>Turn In Your Paper Card by Sunday, December 27</h3>
   <p><b>Goessel City Office, 101 S. Cedar</b></p>
   <ul>
    <li><b>During office hours:</b> Mon&ndash;Thu 8&ndash;12 &amp; 1&ndash;5, Fri 8&ndash;12</li>
-   <li><b>After hours:</b> Use the utility drop box on the east side of the building.</li>
+   <li><b>After hours and weekends:</b> Use the utility drop box on the east side of the building.</li>
   </ul>
-  <div class="pline">Deadline: <span></span></div>
  </section>
  <section class="pp">
   <div class="phead"><p class="ptitle">Christmas Bingo</p><p class="psub">Find Your Christmas Spirit.</p></div>
@@ -216,7 +233,7 @@ dialog::backdrop{background:#0d3d29cc}
   </div>
   <div class="pletters"><span>B</span><span>I</span><span>N</span><span>G</span><span>O</span></div>
   <div class="pgrid" id="pgrid"></div>
-  <p class="pfoot">Complete any row, column, or diagonal. Location example: "Main &amp; 3rd, blue house, on the roof."</p>
+  <p class="pfoot">Complete any row, column, or diagonal. Turn in by Sunday, December 27. Location example: "Main &amp; 3rd, blue house, on the roof."</p>
  </section>
 </div>
 
@@ -224,7 +241,7 @@ dialog::backdrop{background:#0d3d29cc}
 
 <dialog id="entry">
 <h2>🎉 You have Bingo!</h2>
-<p>Submit your completed card for organizer review and entry into the gift card drawing. <b>Limit one entry per person.</b></p>
+<p>Submit your completed card to be entered into the drawing for one of two $25 gift cards. <b>Limit one entry per person.</b></p>
 <form id="entryForm" novalidate>
 <label>Name<input name="name" required maxlength="100" autocomplete="name"></label>
 <p class="small hint">A phone number or email address is required. One is enough.</p>
@@ -238,8 +255,11 @@ dialog::backdrop{background:#0d3d29cc}
 
 <script>
 // Apps Script web-app URL (ends in /exec).
-const API_URL = 'https://script.google.com/macros/s/AKfycbzewRWlxVxmGqEomJnw6INTK5mmAmPkwYQIP79jjUBZlAGPmBn1KuMVqJtFfqdh-ctE/exec';
+const API_URL = 'https://script.google.com/macros/s/AKfycbwTf3_KBWv-uMdS_cP5as62CDnZwR2KeSxB9xN58-CBog-Y0g_-oYastKuJOKHJLCD8/exec';
 
+// Entry deadline: Sunday, Dec 27, 2026 at 11:59 PM Central. Code.gs enforces the same deadline.
+const DEADLINE = new Date('2026-12-27T23:59:59-06:00');
+const closed=()=>Date.now()>DEADLINE.getTime();
 const TAGLINE = 'Find Your Christmas Spirit.';
 const $=id=>document.getElementById(id),KEY='christmas-bingo-v2-token';
 let token='',card=null,db,busy=false,selected=null,prompted=false,localOK=true;
@@ -254,8 +274,8 @@ async function loadPhotosFor(tok){photos.clear();if(db)for(const p of await all(
 async function switchTo(tok){if(busy||tok===token)return;busy=true;render();message('Loading card...');try{const c=await rpc('loadCard',tok);token=tok;card=c;prompted=false;try{localStorage.setItem(KEY,token);}catch(e){localOK=false;}await loadPhotosFor(tok);busy=false;render();await sync();}catch(e){busy=false;message(e.message,true);render();}}
 async function newPlayer(){if(busy)return;if(pending()){message('Finish uploading photos (tap Sync Card) before starting a new player.',true);return;}
  busy=true;render();message('Creating a new card...');try{const r=await rpc('newCard');token=r.token;card=r.card;prompted=false;try{localStorage.setItem(KEY,token);}catch(e){localOK=false;}addPlayer(token);photos.clear();busy=false;render();message('🎄 New card ready. Tap Rename to add a name. Good luck!');}catch(e){busy=false;message(e.message,true);render();}}
-function openEntry(){const f=$('entryForm').elements.name,me=getPlayers().find(p=>p.token===token),label=me&&!/^(Player \d+|Restored card)$/.test(me.label)?me.label:'';if(!f.value||f.value===f.dataset.auto){f.value=label;f.dataset.auto=label;}$('entry').showModal();}
- function renamePlayer(){if(busy||!token)return;const a=getPlayers(),me=a.find(p=>p.token===token);const name=cleanName(prompt('New name for this card:',me?me.label:''));if(!name)return;if(me)me.label=name;else a.push({token,label:name});setPlayers(a);drawPlayers();}
+function openEntry(){if(closed()){message('The entry deadline has passed. Thank you for playing!',true);return;}const f=$('entryForm').elements.name,me=getPlayers().find(p=>p.token===token),label=me&&!/^(Player \d+|Restored card)$/.test(me.label)?me.label:'';if(!f.value||f.value===f.dataset.auto){f.value=label;f.dataset.auto=label;}$('entryError').textContent='';$('entry').showModal();}
+ function renamePlayer(){if(busy||!token)return;const a=getPlayers(),me=a.find(p=>p.token===token);const name=cleanName(prompt('Name for this card:',me&&!/^(Player \d+|Restored card)$/.test(me.label)?me.label:''));if(!name)return;if(me)me.label=name;else a.push({token,label:name});setPlayers(a);drawPlayers();}
 
 async function rpc(action,...args){
  let res;
@@ -292,9 +312,9 @@ function render(){
   b.onclick=()=>{selected=i;$('file').click();};$('grid').append(b);});
  fitText();
  $('progress').textContent=card.saved.length+' / 24 photos saved'+(card.submitted?' | Entry '+card.receipt:'');
- $('claim').disabled=busy||!wins().length||card.submitted||pending();$('claim').hidden=card.submitted;
+ $('claim').disabled=busy||!wins().length||card.submitted||pending()||closed();$('claim').hidden=card.submitted;
  $('save').disabled=busy;$('code').textContent=token;$('sync').disabled=busy;drawPlayers();
- if(wins().length&&!prompted&&!card.submitted&&!busy&&!pending()){prompted=true;openEntry();}
+ if(wins().length&&!prompted&&!card.submitted&&!busy&&!pending()&&!closed()){prompted=true;openEntry();}
 }
 
 // Fills the printable card with this player's clues, then prints.
@@ -314,7 +334,7 @@ async function compress(file){
  try{const img=new Image();await new Promise((res,rej)=>{img.onload=res;img.onerror=()=>rej(Error('Photo format not supported. Try a JPEG.'));img.src=url;});const sc=Math.min(1,1280/Math.max(img.width,img.height)),c=document.createElement('canvas');c.width=Math.max(1,Math.round(img.width*sc));c.height=Math.max(1,Math.round(img.height*sc));c.getContext('2d').drawImage(img,0,0,c.width,c.height);const d=c.toDataURL('image/jpeg',.75);if(d.length>1300000)throw Error('Photo too large. Try another.');return d;}finally{URL.revokeObjectURL(url);}
 }
 async function hydrate(){for(const i of card.saved){if(photos.has(i))continue;try{const data=await rpc('getPhoto',token,i),p={key:token+':'+i,slot:i,token,data,pending:false};photos.set(i,p);if(db)await store(p);render();}catch(e){message('A saved photo preview did not load. Tap Sync Card.',true);}}}
-async function sync(){if(busy||!card)return;busy=true;render();try{for(const p of photos.values()){if(!p.pending)continue;message('Uploading photo... keep this page open.');card=await rpc('savePhoto',token,p.slot,p.data,p.requestId);p.pending=false;if(db)await store(p);}card=await rpc('loadCard',token);message(card.submitted?'🎉 Entry received: '+card.receipt+'. Pending organizer review.':'✅ Your card is saved online.'+(localOK?'':' Copy your recovery code.'));}catch(e){message('Not confirmed saved: '+e.message,true);}finally{await hydrate();busy=false;render();}}
+async function sync(){if(busy||!card)return;busy=true;render();try{for(const p of photos.values()){if(!p.pending)continue;message('Uploading photo... keep this page open.');card=await rpc('savePhoto',token,p.slot,p.data,p.requestId);p.pending=false;if(db)await store(p);}card=await rpc('loadCard',token);message(card.submitted?'🎉 Entry received: '+card.receipt+'. Pending organizer review.':(closed()?'The entry deadline has passed. Thank you for playing!':'✅ Your card is saved online.'+(localOK?'':' Copy your recovery code.')));}catch(e){message('Not confirmed saved: '+e.message,true);}finally{await hydrate();busy=false;render();}}
 async function start(){if(API_URL.indexOf('/exec')<0){message('Setup needed: paste the Apps Script /exec URL into API_URL.',true);return;}try{try{token=localStorage.getItem(KEY)||'';}catch(e){localOK=false;}try{db=await openDB();}catch(e){localOK=false;}if(!token){const r=await rpc('newCard');token=r.token;card=r.card;try{localStorage.setItem(KEY,token);}catch(e){localOK=false;}}else card=await rpc('loadCard',token);addPlayer(token);if(db)for(const p of await all())if(p.token===token)photos.set(p.slot,p);render();await sync();}catch(e){message(e.message+' Use Restore if you have a recovery code.',true);}}
 
 // Festive card picture. isPrivate adds name/date/contact (organizer copy only).
@@ -345,7 +365,7 @@ $('file').onchange=async e=>{const f=e.target.files[0],slot=selected;e.target.va
 $('sync').onclick=()=>card?sync():start();$('claim').onclick=openEntry;$('later').onclick=()=>$('entry').close();$('save').onclick=saveMyCard;$('newPlayer').onclick=newPlayer;$('renamePlayer').onclick=renamePlayer;$('player').onchange=e=>switchTo(e.target.value);$('print').onclick=printCard;
 $('copy').onclick=async()=>{try{await navigator.clipboard.writeText(token);message('Recovery code copied. Keep it private.');}catch(e){message('Select and copy the code manually.');}};
 $('restore').onclick=async()=>{if(busy)return;const next=$('restoreCode').value.trim();try{const r=await rpc('loadCard',next);token=next;card=r;photos.clear();prompted=false;try{localStorage.setItem(KEY,token);}catch(e){localOK=false;}addPlayer(token,'Restored card');if(db)for(const p of await all())if(p.token===token)photos.set(p.slot,p);render();await sync();}catch(e){message(e.message,true);}};
-$('entryForm').onsubmit=async e=>{e.preventDefault();const f=new FormData(e.target),err=$('entryError');err.textContent='';const info={name:(f.get('name')||'').trim(),phone:(f.get('phone')||'').trim(),email:(f.get('email')||'').trim(),consent:f.get('consent')==='on'};if(!info.name){err.textContent='Name is required.';return;}if(!info.phone&&!info.email){err.textContent='Enter a phone number or an email.';return;}if(!info.consent){err.textContent='Please check the agreement box.';return;}$('send').disabled=true;busy=true;try{let priv='',pub='';try{priv=await buildCardImage({isPrivate:true,name:info.name,phone:info.phone,email:info.email});}catch(x){}try{pub=await buildCardImage({isPrivate:false});}catch(x){}const r=await rpc('submitEntry',token,info,priv,pub);card.receipt=r.receipt;card.submitted=true;e.target.reset();$('entry').close();message('🎉 Entry received: '+r.receipt+'. Pending organizer review. Tap "Save My Card" to keep a copy, or "+ New Player" for someone else.');}catch(x){err.textContent=x.message;}finally{$('send').disabled=false;busy=false;render();}};
+$('entryForm').onsubmit=async e=>{e.preventDefault();const f=new FormData(e.target),err=$('entryError');err.textContent='';if(closed()){err.textContent='The entry deadline has passed.';return;}const info={name:(f.get('name')||'').trim(),phone:(f.get('phone')||'').trim(),email:(f.get('email')||'').trim(),consent:f.get('consent')==='on'};if(!info.name){err.textContent='Name is required.';return;}if(!info.phone&&!info.email){err.textContent='Enter a phone number or an email.';return;}if(!info.consent){err.textContent='Please check the agreement box.';return;}$('send').disabled=true;busy=true;try{let priv='',pub='';try{priv=await buildCardImage({isPrivate:true,name:info.name,phone:info.phone,email:info.email});}catch(x){}try{pub=await buildCardImage({isPrivate:false});}catch(x){}const r=await rpc('submitEntry',token,info,priv,pub);card.receipt=r.receipt;card.submitted=true;e.target.reset();$('entry').close();message('🎉 Entry received: '+r.receipt+'. Pending organizer review. Tap "Save My Card" to keep a copy, or "+ New Player" for someone else.');}catch(x){err.textContent=x.message;}finally{$('send').disabled=false;busy=false;render();}};
 window.addEventListener('online',()=>sync());start();
 </script>
 </body>
