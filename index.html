@@ -103,7 +103,8 @@ dialog::backdrop{background:#0d3d29cc}
  .pgrid{display:grid;grid-template-columns:repeat(5,1.44in);grid-auto-rows:1.44in;width:7.2in;margin:0 auto;border:2pt solid #000}
  .pc{border:0.75pt solid #000;padding:5pt;display:flex;flex-direction:column;justify-content:space-between}
  .pclue{font:700 10pt/1.2 system-ui,sans-serif;text-align:center}
- .ploc{font:400 7.5pt system-ui,sans-serif;border-bottom:0.75pt solid #000;padding-bottom:14pt}
+ .ploc{font:400 7.5pt system-ui,sans-serif;border-bottom:0.75pt solid #000;padding-bottom:12pt}
+ .ploc2{border-bottom:0.75pt solid #000;height:15pt}
  .pfree{align-items:center;justify-content:center;font:700 20pt Georgia,serif;text-align:center}
  .pfree small{display:block;font:12pt Georgia,serif}
  .pfoot{text-align:center;font:9pt system-ui,sans-serif;margin-top:6pt}
@@ -233,7 +234,7 @@ dialog::backdrop{background:#0d3d29cc}
   </div>
   <div class="pletters"><span>B</span><span>I</span><span>N</span><span>G</span><span>O</span></div>
   <div class="pgrid" id="pgrid"></div>
-  <p class="pfoot">Complete any row, column, or diagonal. Turn in by <span data-i="endDate">Sunday, December 27</span>. Location example: "Main &amp; 3rd, blue house, on the roof."</p>
+    <p class="pfoot">Complete any row, column, or diagonal. Turn in by <span data-i="endDate">Sunday, December 27</span>.</p>
  </section>
 </div>
 
@@ -328,7 +329,7 @@ function printCard(){
  const g=$('pgrid');g.replaceChildren();
  card.clues.forEach((clue,i)=>{const d=document.createElement('div');
   if(i===12){d.className='pc pfree';d.innerHTML='<small>✶</small>FREE<small>✶</small>';}
-  else{d.className='pc';const c=document.createElement('div');c.className='pclue';c.textContent=clue;const w=document.createElement('div');w.className='ploc';w.textContent='Location:';d.append(c,w);}
+  else{d.className='pc';const c=document.createElement('div');c.className='pclue';c.textContent=clue;const w=document.createElement('div');w.className='ploc';w.textContent='Location:';const w2=document.createElement('div');w2.className='ploc2';const box=document.createElement('div');box.append(w,w2);d.append(c,box);}
   g.append(d);});
  $('purl').textContent=location.origin+location.pathname;
  window.print();
