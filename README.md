@@ -1,138 +1,156 @@
-GOESSEL CHRISTMAS BINGO - LOCAL-FIRST PHOTO UPDATE
-================================================
-This is replacement code, not a deployment. Nothing on your live site, spreadsheet,
-or Drive was changed while preparing this package.
+GOESSEL CHRISTMAS BINGO - REVISION 2
+===================================
+Replacement code, not a live deployment. No live spreadsheet, site, or photos
+were changed while building this package.
 
-FILES
------
-Google Apps Script: Code.gs and Admin.gs
-GitHub Pages: index.html, app.js, and sw.js (all three in the same folder)
-Do NOT publish Code.gs or Admin.gs in your public GitHub repository.
+IMPLEMENTED CHANGE LIST
+-----------------------
+1. + New Player generates and saves the randomized card ON THE DEVICE.
+   No server request and no spreadsheet row is created by this button.
+   All 24 downloaded clues are shuffled; FREE stays in the center. Layout is
+   saved and stays fixed when reopening or switching players. New players can
+   be created offline after an online visit has downloaded settings and clues.
+2. Register the card with the server only when submission starts. Registration
+   validates the clue arrangement and event ID, and retries reuse the same card.
+   The 100-card limit now limits REGISTERED cards, including incomplete submissions.
+   Admin A13 is relabeled Cards registered at submission. It cannot count cards
+   that exist only on phones. Existing server cards are retained.
+3. Remove recovery-code UI. Internal random card identifiers remain for safe
+   submissions/status lookup. Keep using the same device/browser until submission.
+4. Throughout submission, show ONLY a spinner and Uploading your submission...
+   No photo numbers, photo counts, file names, or upload-stage details.
+   Errors remain visible when an action actually fails. Reduced-motion preference
+   disables the rotation but retains the indicator and text.
+5. Read Entries ReviewStatus on page open and Refresh Status:
+   Pending review -> Entry received / Awaiting organizer review.
+   Approved -> Your Bingo entry is approved for the drawing!
+   Not approved -> Your entry needs attention. Please contact the organizer.
+   Prize delivered -> Your prize is marked as delivered. Thank you for playing!
+   This is NOT live push. An already-open phone updates when refreshed/reopened.
+   Offline it retains the last known review status. Approval still displays after
+   the contest closes. No automatic photo approval or winner notification.
+6. Private test mode uses a secret-link key AND a separate spreadsheet, photo
+   folder, event ID, counters, settings cache and local browser database. Test
+   submissions do not enter the production drawing. The test page has a banner.
+   The link is possession-based access, NOT a Google sign-in gate. Anyone with
+   the link can use the test environment. Do not publish or forward it to players.
 
-WHAT CHANGES
-------------
-* Photos save to IndexedDB on the playing device. Attaching a photo makes NO API
-  call and does not upload it. Cards, photo order, and first-Bingo count persist.
-* An already-prepared page can reopen offline using sw.js. First-time setup and
-  creating a new player still need internet. Existing local players switch offline.
-* Contact information is requested at submission, not while taking photos.
-* Admin!B26 is the new Photo submission mode dropdown. Default: All photos.
-  All photos: uploads each completed square's photo at submission.
-  Winning photos only: uploads the photos in ONE currently completed line (four
-  if it includes FREE, five otherwise).
-  Card image only: uploads NO separate square photos.
-  Every mode submits the organizer card image and the no-contact shareable image.
-* The organizer card is 1892 x 2152 pixels. The full photo is fitted above its
-  clue label instead of being cropped. Individual uploads retain more detail.
-* New Entries columns N-Q: CluesCompletedAtBingo, PhotosAtSubmission,
-  PhotoSubmissionMode, HistorySource. Existing columns A-M retain their positions.
-* First-Bingo count excludes FREE and counts distinct squares. Replacing a photo
-  does not add a clue. Continuing after Bingo does not change the first count.
-* IMPORTANT: this measures PHOTO-ATTACHMENT ORDER, not the time/order in which
-  the camera took photos. If a player attaches photos later, that is the order
-  recorded. It is device-reported game data, not independent proof of the hunt.
-* Old cards with unknown attachment history are labeled Unknown (legacy card).
-  Existing entries are not backfilled or modified.
-* A submission snapshots the spreadsheet mode. Retrying keeps that mode even if
-  you change B26. Confirmed uploads are reused. The card locks for editing once
-  submission starts; retry Submit Bingo to finish after an interruption.
-* Your two print writing lines, page-1 example, page-2 reminder, prizes, dates,
-  multiple players, recovery codes, drawing and review tools are retained.
-* New cards snapshot their clue text. Changing the Clues tab affects NEW cards,
-  not cards already issued. Finalize the clues before launch.
-* Sync Card becomes Refresh Status. It refreshes settings/status, not photo uploads.
+PRESERVED
+---------
+Admin B26 photo mode: All photos / Winning photos only / Card image only.
+Local photos during play; upload at submission; resumable uploads; high-resolution
+organizer card; first-Bingo count and submission photo count; multiple players;
+Rename; print layout and both writing lines; page-1 example; page-2 reminder;
+prizes, date controls, review tools, drawing, and reset.
 
-IMPLEMENTATION ON YOUR EXISTING PROJECT
---------------------------------------
-1. BACK UP FIRST. Save your current index.html, Code.gs and Admin.gs separately.
-   Keep a private spreadsheet copy and any needed photos. This ZIP is the NEW
-   code; it is not a backup of your live spreadsheet or Drive data.
-2. Pause the event: uncheck Admin!B7. Keep it paused during the coordinated update.
-   Existing old browser tabs must be closed/reloaded after the update.
-3. Extract this ZIP. Open Code.gs in a plain-text editor, select all its contents,
-   and replace the entire Code.gs in your EXISTING Apps Script project. Do the
-   same with Admin.gs. Save BOTH. Do not add duplicate copies or keep old Part2.gs.
-   Do not run setup. Do not create a new spreadsheet or project.
-4. In Apps Script, run installAdmin once. Approve requested permissions if needed.
-   This updates the existing spreadsheet, adds B26 and columns N-Q, and refreshes
-   the existing on-edit trigger. It does NOT reset entries, clues, dates or photos.
-   Existing Admin B4:B24 locations stay the same. Check B26 says All photos.
-5. Update the EXISTING deployment: Deploy > Manage deployments > select the active
-   deployment > Edit (pencil) > Version: New version > Deploy.
-   Keep the existing execute-as/access settings. Do not create a different URL.
-6. In your GitHub Pages publishing folder, replace index.html and add app.js and
-   sw.js alongside it. Commit all three together. Do not paste .gs code into Wix.
-   The existing endpoint from your supplied HTML is already in app.js.
-7. For a test, set B4 to a time before now, B5 to a future time, and B6 after B5.
-   Re-enable B7. Refresh the published game. Confirm the normal game page loads
-   and the offline-preparation message appears. Use a NEW test player card.
-8. After testing, restore your intended event dates and switch. A paused event
-   remains paused until B7 is checked. Refresh the game to pick up changed settings.
+EXISTING ENTRIES SCHEMA (DO NOT RENAME OR MOVE COLUMNS)
+----------------------------------------------------
+A Receipt                  J ShareableCard
+B SubmittedUTC             K OkToShare
+C Name                     L WinningClues
+D Phone                    M DuplicateCheck
+E Email                    N BingoType
+F CardHash                 O CluesCompletedAtBingo
+G PhotoReviewLinks         P PhotosAtSubmission
+H ReviewStatus             Q PhotoSubmissionMode
+I CardPicture              R HistorySource
+New OkToShare values remain FALSE. Organizer review consent is not publication
+permission. Existing rows and sharing values are not rewritten.
 
-TEST CHECKLIST ON YOUR OWN IPHONE
---------------------------------
-[ ] Open online and create a card. Confirm offline preparation message.
-[ ] Turn on airplane mode. Attach photos to several squares. No upload required.
-[ ] Close/reopen or reload the SAME published page offline. Photos should remain.
-[ ] Switch between two players created earlier while online.
-[ ] Complete Bingo. Message is simply You have Bingo! No connect-to-internet text.
-[ ] Tap Not Now, add more photos, and confirm first-Bingo count stays unchanged.
-[ ] Reconnect. Submit with name and phone OR email plus consent.
-[ ] Check Entries N-Q, BingoType, photo links, CardPicture, and DuplicateCheck.
-[ ] Test each B26 mode with a NEW test card. Change mode before submission starts.
-[ ] Interrupt a submission and retry. Already-confirmed uploads should be reused.
-[ ] Print: two Letter pages, 24 second location lines, page-1 example retained.
-[ ] Open the organizer JPG and zoom in on a real night photo for quality review.
+UPDATE YOUR EXISTING INSTALLATION
+---------------------------------
+1. Back up the current files and private spreadsheet. Keep original photos.
+   Do NOT reset or clear browser data. Pause production using Admin B7 while
+   updating. Keep the intended public opening/deadline dates unchanged.
+2. Replace Code.gs AND Admin.gs in your EXISTING Apps Script project. Save both.
+   Do not add duplicate files or retain old Part2.gs copies. Do not run setup.
+3. Run installAdmin. It preserves existing dates, clues, entries, and photos,
+   validates the schema, adds any missing headings, and updates the edit trigger.
+4. Update the EXISTING deployment: Deploy > Manage deployments > select the
+   active deployment > Edit/pencil > New version > Deploy. Keep the existing URL
+   and access/execute-as settings. The supplied endpoint in app.js is unchanged.
+5. Replace index.html, app.js AND sw.js together in the GitHub Pages publishing
+   folder. Do not publish the .gs files in the public repository.
+6. Close ALL open Bingo tabs/windows, then reopen the published game online.
+   This lets the updated service worker activate. Do not clear website data to
+   force an update; that can delete local photos. Existing cards are preserved.
+7. Restore the intended production B7 setting after deployment. Before Dec 14,
+   production remains upcoming if the original dates are retained. Use the
+   PRIVATE TEST setup below instead of changing public dates just to test.
 
-OFFLINE / RECOVERY LIMITS
-------------------------
-Offline reopening requires a successful online visit and service-worker install
-on the published HTTPS site (or localhost for development), not opening a local
-HTML file. It is not a promise of permanent storage. Browsers can clear/evict
-local data; private browsing, clearing website data, changing browser or changing
-website origin can lose local photos. Keep original camera photos and use the
-same device/browser until submission is confirmed. A recovery code cannot restore
-photos the server has never received. In Card image only mode the organizer has
-all submitted photos inside the composite image, but separate photo-square
-restoration on a different device is not available.
-An offline device cannot learn that the organizer paused/reset/changed the event
-until it reconnects. The server always enforces current dates and pause status
-when preparing uploads or accepting the entry. Submit before the deadline.
+PRIVATE TEST SETUP (AFTER THE UPDATE)
+------------------------------------
+1. Run setupPrivateTest in Apps Script. It creates separate private test records
+   and a separate photo folder. It does not open or reset the public contest.
+   On first creation it copies the current production clue list and gives the
+   test contest an open date range. Test settings are edited in the TEST sheet.
+2. In your PRODUCTION spreadsheet Admin B30, paste the exact published HTTPS
+   GAME address (the GitHub game itself, not the Wix front-door/button page).
+   Use the normal game address without a fragment. No need to put a secret in
+   public source code.
+3. Run setupPrivateTest again. Existing test data is preserved.
+4. PRODUCTION Admin B31 links to the test spreadsheet. B32 contains the private
+   test game link. Open B32 and confirm the PRIVATE TEST MODE banner.
+5. Review/approve TEST entries in the TEST spreadsheet. Refresh Status on the
+   test phone to check approval. Test B26 controls test photo-upload mode.
+6. Use test Admin checkbox actions for test drawing/reset. Running pickWinners
+   or resetEvent directly from the editor uses production context; do not do
+   that for a test. A test reset pauses only the test event; re-enable test B7
+   after checking its settings.
+7. Run revokePrivateTest manually if the private link is exposed. This revokes
+   its key without deleting data or changing production. Run setupPrivateTest
+   again to generate a replacement link. Update your bookmark to the new B32.
 
-ADMIN SAFETY CHANGES
---------------------
-Reset is NOT needed to install this update. Do not use Reset on real entries.
-If deliberately resetting test data: type RESET in B21, then check B22. Reset
-clears Cards/Entries/Winners, rotates the private upload folder and event ID,
-trashes the old photo folder, and leaves B7 UNCHECKED. Settings and clues stay.
-It does not permanently erase Drive data or clear photos on players' devices.
-Check the result in B24. Re-enable only when you are ready.
-Pick winners uses Approved entries only, records results once, and sends no
-messages. Resolve duplicate flags manually, especially families sharing contact
-information. There is no automatic AI image matching or automatic approval.
+TEST CHECKLIST
+--------------
+[ ] Open private test link; banner is visible and production remains upcoming.
+[ ] + New Player changes the layout, keeps FREE centered, and creates no Cards row.
+[ ] Prepare online, then airplane mode: create another player and attach photos.
+[ ] Reopen the SAME game page offline; players and photos remain.
+[ ] Reach Bingo, add more photos, confirm first-Bingo count stays fixed.
+[ ] Submit after reconnecting. Spinner text never lists photo numbers or details.
+[ ] Confirm a row appears only in TEST Cards/Entries, not production.
+[ ] Mark Approved in TEST Entries H; tap Refresh Status on phone.
+[ ] Close/reopen the phone page; approval is still displayed.
+[ ] Repeat with each test B26 mode using a fresh test card.
+[ ] Print and check two Letter pages, writing lines, example, and footer.
+[ ] Open organizer card and inspect a real night photo at zoom.
+
+LIMITS AND IMPORTANT DETAILS
+----------------------------
+First-Bingo count is the order of distinct photo ATTACHMENTS, not the camera's
+capture order or proof of the order sights were found. FREE is excluded.
+Replacing a photo does not increase the clue count. Legacy cards with unknown
+history remain labeled unknown, not assigned an invented count.
+New cards use the cached clue list. Finalize clues before public play. If the
+organizer changes the clue list after a local card is created, server validation
+may reject its first submission. Do not change clues mid-event without planning
+how to handle already-issued cards. Refresh Status downloads new settings for
+future cards; it does not rearrange existing cards.
+Offline devices cannot know about a pause/reset until they reconnect. The server
+enforces current dates and event ID when accepting registration and submission.
+The upload mode is snapshotted when submission starts. Retrying keeps that mode.
+Before submission, photos exist only on that device. Browser data can be cleared
+or evicted. Keep original camera photos and avoid private browsing. Removing
+recovery-code UI does not create cross-device backup.
+Private test resources share the Apps Script runtime and account quota with
+production, but not the production spreadsheet or upload folder. Keep testing
+small. Test links are secrets; do not include them in flyers, QR codes or Wix.
+
+VALIDATION
+----------
+Local Node tests with simulated Google services verified all three upload modes,
+registration retries, 18-column schema, approval lookup, invalid layout/event
+rejection, test-key rejection, separate sheets/folders/counters/cache, test setup,
+trigger separation, idempotent setup, and revocation/rekey.
+Chromium with a mocked API verified zero API calls for +New Player, offline new
+players and reopening, randomized persisted layouts, photo history, upload retry,
+single spinner message, approval refresh/reopen, private local-data separation,
+and retained print details. These are not live Apps Script/Drive or physical
+Safari/iPhone tests. Run the checklist on your devices before public launch.
 
 ROLLBACK
 --------
-Keep the old source files, old deployment version, and spreadsheet backup.
-Rollback is simplest BEFORE anyone uses the new version. After local-first play
-starts, do not revert casually: unsubmitted photos may exist only on phones, and
-older code cannot read the new IndexedDB version. Do not clear browser storage
-as a troubleshooting step. Pause and preserve data first.
-
-VALIDATION PERFORMED HERE
--------------------------
-JavaScript syntax checked. Node tests with simulated Sheets/Drive verified all
-three modes, required-photo checks, retry idempotency, first-Bingo history,
-duplicate flags, invalid settings, install preservation, drawing and reset safety.
-Chromium tests with a mocked API verified no uploads during play, real cached
-page reload with API unavailable, local photo persistence, offline player switching,
-all three submission modes, interrupted-upload resume, mode snapshotting, and
-1892 x 2152 organizer images. Print rendering was two pages with retained details.
-These are local/simulated tests, NOT a live Google Apps Script/Drive deployment
-or a physical iPhone test. Run the checklist above before public launch.
-
-REFERENCE DOCUMENTATION
------------------------
-Service workers: https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API
-Browser storage: https://developer.mozilla.org/en-US/docs/Web/API/Storage_API/Storage_quotas_and_eviction_criteria
-Deployment versions: https://developers.google.com/apps-script/guides/versions
+Keep prior source and deployment versions. Pause and preserve data before any
+rollback. Do not clear local storage/IndexedDB: it may contain the only copies
+of unsubmitted photos. Old code may not understand locally created cards.
